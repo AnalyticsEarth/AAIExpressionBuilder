@@ -31,7 +31,7 @@ define( [], function () {
 				type: "items",
 				label: "Settings",
 				items: {
-					includeBeta: includeBeta
+					beta: includeBeta
 				}
 			}
 		}
@@ -46,7 +46,7 @@ define( [], function () {
 		component: "accordion",
 		items: {
 			appearance: appearanceSection,
-			aaiSettings: aaiSettings
+			settings: aaiSettings
 		}
 	};
 });
