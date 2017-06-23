@@ -341,7 +341,7 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 						$scope.createMasterViz = function(aeVizTemplate){
 							console.log('Create Viz');
 							if(aeVizTemplate.type){
-								$.getJSON('../extensions/aeRWizard/' + aeVizTemplate.type + '.json', function(response){
+								$.getJSON('../extensions/AAIExpressionBuilder/templates/' + aeVizTemplate.type + '.json', function(response){
 									var vizJSON = response;
 
 									vizJSON.qMetaDef.title = aeVizTemplate.title;
