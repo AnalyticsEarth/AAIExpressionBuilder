@@ -1,17 +1,17 @@
 define( [], function () {
 	'use strict';
 
-	var stateName = {
-		ref: "props.showTitles",
-		label: "Show Titles",
-		type: "boolean"
-	};
-
 	// Appearance section
 	var appearanceSection = {
 		uses: "settings",
 		items: {
-			stateName: stateName
+			general: {
+				items:{
+					showTitles:{
+						defaultValue: false
+					}
+				}
+			}
 		}
 	};
 
@@ -20,10 +20,10 @@ define( [], function () {
 	// Only what is defined here is returned from properties.js
 	// *****************************************************************************
 	return {
-		type: "items"/*,
+		type: "items",
 		component: "accordion",
 		items: {
 			appearance: appearanceSection
-		}*/
+		}
 	};
 });
