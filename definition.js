@@ -12,7 +12,6 @@ define( [], function () {
 					}
 				}
 			}
-			includeBeta: includeBeta
 		}
 	};
 
@@ -22,7 +21,15 @@ define( [], function () {
 		type: "boolean",
 		component: "switch",
 		defaultValue: false
-	}
+	};
+
+	var aaiSettings = {
+		component: "expandable-items",
+		label: "AAI Builder Settings",
+		items: {
+			includeBeta: includeBeta
+		}
+	};
 
 	// *****************************************************************************
 	// Main properties panel definition
@@ -32,7 +39,8 @@ define( [], function () {
 		type: "items",
 		component: "accordion",
 		items: {
-			appearance: appearanceSection
+			appearance: appearanceSection,
+			aaiSettings: aaiSettings
 		}
 	};
 });
