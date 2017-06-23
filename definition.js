@@ -25,9 +25,15 @@ define( [], function () {
 
 	var aaiSettings = {
 		component: "expandable-items",
-		label: "AAI Builder Settings",
+		label: "AAI Expression Builder",
 		items: {
-			includeBeta: includeBeta
+			header: {
+				type: "items",
+				label: "Settings",
+				items: {
+					includeBeta: includeBeta
+				}
+			}
 		}
 	};
 
