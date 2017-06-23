@@ -1,0 +1,218 @@
+{			"qInfo": {
+				"qType": "masterobject"
+			},
+			"qMetaDef": {
+				"title": "",
+				"description": "",
+				"tags": []
+			},
+			"qHyperCubeDef": {
+				"qDimensions": [
+					{
+						"qLibraryId": "9c72bcef-c513-4cd3-93c3-6cdae84c3253",
+						"qDef": {
+							"qGrouping": "N",
+							"qFieldDefs": [],
+							"qFieldLabels": [],
+							"qSortCriterias": [
+								{
+									"qSortByLoadOrder": 1,
+									"qExpression": {}
+								}
+							],
+							"qNumberPresentations": [],
+							"qActiveField": 0,
+							"autoSort": true,
+							"cId": "aVgJPP",
+							"othersLabel": "Others"
+						},
+						"qNullSuppression": true,
+						"qOtherTotalSpec": {
+							"qOtherMode": "OTHER_OFF",
+							"qOtherCounted": {
+								"qv": "10"
+							},
+							"qOtherLimit": {
+								"qv": "0"
+							},
+							"qOtherLimitMode": "OTHER_GE_LIMIT",
+							"qForceBadValueKeeping": true,
+							"qApplyEvenWhenPossiblyWrongResult": true,
+							"qOtherSortMode": "OTHER_SORT_DESCENDING",
+							"qTotalMode": "TOTAL_OFF",
+							"qReferencedExpression": {}
+						},
+						"qOtherLabel": {
+							"qv": "Others"
+						},
+						"qTotalLabel": {},
+						"qCalcCond": {},
+						"qAttributeExpressions": [
+							{
+								"qLibraryId": "d7bc4100-1953-4472-bf0f-1a0423550c1f",
+								"id": "colorByAlternative",
+								"matchMeasure": -1
+							}
+						],
+						"qAttributeDimensions": []
+					}
+				],
+				"qMeasures": [
+					{
+						"qLibraryId": "c9553aeb-6073-4c70-bcdc-1f8195b0311d",
+						"qDef": {
+							"qTags": [],
+							"qGrouping": "N",
+							"qNumFormat": {
+								"qType": "U",
+								"qnDec": 10,
+								"qUseThou": 0
+							},
+							"qAccumulate": 0,
+							"qActiveExpression": 0,
+							"qExpressions": [],
+							"autoSort": true,
+							"cId": "XjkVrHS",
+							"numFormatFromTemplate": true
+						},
+						"qSortBy": {
+							"qSortByNumeric": -1,
+							"qSortByLoadOrder": 1,
+							"qExpression": {}
+						},
+						"qAttributeExpressions": [],
+						"qAttributeDimensions": [],
+						"qCalcCond": {}
+					},
+					{
+						"qLibraryId": "f052a4ca-a655-4c84-8cfa-c997baf81d88",
+						"qDef": {
+							"qTags": [],
+							"qGrouping": "N",
+							"qNumFormat": {
+								"qType": "U",
+								"qnDec": 10,
+								"qUseThou": 0
+							},
+							"qAccumulate": 0,
+							"qActiveExpression": 0,
+							"qExpressions": [],
+							"autoSort": true,
+							"cId": "FgTJNAU",
+							"numFormatFromTemplate": true
+						},
+						"qSortBy": {
+							"qSortByNumeric": -1,
+							"qSortByLoadOrder": 1,
+							"qExpression": {}
+						},
+						"qAttributeExpressions": [],
+						"qAttributeDimensions": [],
+						"qCalcCond": {}
+					}
+				],
+				"qInterColumnSortOrder": [
+					2,
+					1,
+					0
+				],
+				"qSuppressMissing": true,
+				"qInitialDataFetch": [],
+				"qReductionMode": "N",
+				"qMode": "S",
+				"qPseudoDimPos": -1,
+				"qNoOfLeftDims": -1,
+				"qMaxStackedCells": 5000,
+				"qCalcCond": {},
+				"qTitle": {},
+				"customErrorMessage": {
+					"calcCond": ""
+				},
+				"qLayoutExclude": {
+					"qHyperCubeDef": {
+						"qDimensions": [],
+						"qMeasures": [],
+						"qInterColumnSortOrder": [],
+						"qInitialDataFetch": [],
+						"qReductionMode": "N",
+						"qMode": "S",
+						"qPseudoDimPos": -1,
+						"qNoOfLeftDims": -1,
+						"qMaxStackedCells": 5000,
+						"qCalcCond": {},
+						"qTitle": {}
+					}
+				}
+			},
+			"refLine": {
+				"refLinesX": [],
+				"refLinesY": []
+			},
+			"showTitles": true,
+			"title": "",
+			"subtitle": "",
+			"footnote": "",
+			"showDetails": false,
+			"navigation": false,
+			"dataPoint": {
+				"bubbleSizes": 5,
+				"rangeBubbleSizes": [
+					2,
+					8
+				]
+			},
+			"labels": {
+				"mode": 1
+			},
+			"compressionResolution": 5,
+			"gridLine": {
+				"auto": true,
+				"spacing": 2
+			},
+			"color": {
+				"auto": false,
+				"mode": "byMeasure",
+				"useBaseColors": "off",
+				"singleColor": 3,
+				"paletteColor": {
+					"index": 6
+				},
+				"persistent": false,
+				"expressionIsColor": true,
+				"expressionLabel": "",
+				"measureScheme": "sg",
+				"reverseScheme": false,
+				"dimensionScheme": "12",
+				"autoMinMax": true,
+				"measureMin": 0,
+				"measureMax": 10,
+				"byMeasureDef": {
+					"key": "d7bc4100-1953-4472-bf0f-1a0423550c1f",
+					"type": "libraryItem"
+				}
+			},
+			"legend": {
+				"show": true,
+				"dock": "auto",
+				"showTitle": true
+			},
+			"xAxis": {
+				"show": "all",
+				"dock": "near",
+				"spacing": 1,
+				"autoMinMax": true,
+				"minMax": "min",
+				"min": 0,
+				"max": 10
+			},
+			"yAxis": {
+				"show": "all",
+				"dock": "near",
+				"spacing": 1,
+				"autoMinMax": true,
+				"minMax": "min",
+				"min": 0,
+				"max": 10
+			},
+			"visualization": "scatterplot"
+}

@@ -1,0 +1,93 @@
+{
+			"qInfo": {
+				"qType": "masterobject"
+			},
+			"qMetaDef": {
+				"title": "",
+				"description": "",
+				"tags": []
+			},
+			"qHyperCubeDef": {
+				"qDimensions": [],
+				"qMeasures": [
+					{
+						"qLibraryId": "",
+						"qDef": {
+							"qTags": [],
+							"qGrouping": "N",
+							"qNumFormat": {
+								"qType": "U",
+								"qnDec": 10,
+								"qUseThou": 0
+							},
+							"qAccumulate": 0,
+							"qActiveExpression": 0,
+							"qExpressions": [],
+							"autoSort": true,
+							"numFormatFromTemplate": true,
+							"conditionalColoring": {
+								"useConditionalColoring": false,
+								"singleColor": 3,
+								"segments": {
+									"limits": [],
+									"colors": [
+										{
+											"color": 2
+										}
+									]
+								}
+							},
+							"measureAxis": {
+								"min": 0,
+								"max": 100
+							}
+						},
+						"qSortBy": {
+							"qSortByNumeric": -1,
+							"qSortByLoadOrder": 1,
+							"qExpression": {}
+						},
+						"qAttributeExpressions": [],
+						"qAttributeDimensions": [],
+						"qCalcCond": {}
+					}
+				],
+				"qInterColumnSortOrder": [
+					0
+				],
+				"qSuppressMissing": true,
+				"qInitialDataFetch": [
+					{
+						"qLeft": 0,
+						"qTop": 0,
+						"qWidth": 500,
+						"qHeight": 10
+					}
+				],
+				"qReductionMode": "N",
+				"qMode": "S",
+				"qPseudoDimPos": -1,
+				"qNoOfLeftDims": -1,
+				"qMaxStackedCells": 5000,
+				"qCalcCond": {},
+				"qTitle": {},
+				"customErrorMessage": {
+					"calcCond": ""
+				}
+			},
+			"showTitles": false,
+			"title": "",
+			"subtitle": "",
+			"footnote": "",
+			"showDetails": false,
+			"showMeasureTitle": true,
+			"textAlign": "center",
+			"fontSize": "M",
+			"useLink": false,
+			"sheetLink": "",
+			"openUrlInNewTab": true,
+			"color": {
+				"useBaseColors": "measure"
+			},
+			"visualization": "kpi"
+}

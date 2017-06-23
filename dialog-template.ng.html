@@ -1,0 +1,147 @@
+<lui-dialog class="wizarddialog">
+	<lui-dialog-header>
+    	<lui-dialog-title>Advanced Analytics Expressions Builder</lui-dialog-title>
+  	</lui-dialog-header>
+	<lui-dialog-body class="wizarddialogbody">
+    <lui-tab-view>
+		<lui-tabset fill="true" active-tab="tabs">
+			<lui-tab ref="tab1">Expression Builder</lui-tab>
+			<lui-tab ref="tab2">Preview Master Items</lui-tab>
+		</lui-tabset>
+		<lui-tab-content ref="tab1">
+			<lui-dialog-header class="wizardSelectHeader">
+			<lui-dialog-title>Select Advanced Analytics Function:</lui-dialog-title>
+    			<lui-select x-model="selectedWizard" ng-change="changeWizard(selectedWizard)">
+					<option ng-repeat="wiz in input.wizardList" value="{{wiz.index}}">{{wiz.name}}</option>
+				</lui-select>
+  			</lui-dialog-header>
+  			<lui-dialog-body>
+			<div class="inputPlaceholder" ng-if="input.selectedKey == ''">
+			<span class="lui-icon  placeholderIcon  lui-icon--effects"></span><br/>
+			Select Advanced Analytics Function
+			</div>
+
+			<div ng-if="input.selectedKey !== ''">
+
+			<div class="wizardtitle"><b>{{input.wizardName}}</b> requires the following parameters:</div>
+			<ul class="lui-list">
+					<li ng-repeat="par in input.uiarray" class="lui-list__item">
+    					<span class="lui-list__text">
+						<div class="PreviewListLeft">
+						{{par.name}}
+						</div>
+						<div class="PreviewListRight">
+							<span class="InputAlignLeft" ng-if="par.type == 'freeform'">
+								<input ng-model="input.uiarray[par.index].inputvalue" ng-value="input.uiarray[par.index].inputvalue" class="lui-input"/>
+							</span>
+
+							<span class="InputAlignLeft" ng-if="par.type == 'fieldselect'">
+								<lui-select x-model="input.uiarray[par.index].inputvalue" ng-value="input.uiarray[par.index].inputvalue">
+									<option ng-if="fld.qTags.indexOf(par.tag) !== -1 || par.tag == null" ng-repeat="fld in input.fieldList.qFieldList.qItems" value="{{fld.qName}}">{{fld.qName}}</option>
+								</lui-select>
+							</span>
+
+							<span class="InputAlignLeft" ng-if="par.includeagg">
+								<lui-select x-model="input.uiarray[par.index].aggvalue" ng-value="input.uiarray[par.index].aggvalue">
+									<option ng-repeat="agg in input.aggList" value="{{agg}}">{{agg}}</option>
+								</lui-select>
+							</span>
+
+							<span class="InputAlignLeft" ng-if="par.includedateagg">
+								<lui-select x-model="input.uiarray[par.index].dateaggvalue" ng-value="input.uiarray[par.index].dateaggvalue">
+									<option ng-repeat="agg in input.dateAggList" value="{{agg.level}}">{{agg.level}}</option>
+								</lui-select>
+							</span>
+						</div>
+						</span>
+  					</li>
+				</ul>
+				<div class="wizardtitlespacer"></div>
+				<div class="wizardtitle"><b>{{input.wizardName}}</b> can generate the following objects:</div>
+				<ul class="lui-list">
+					<li ng-repeat="template in input.codeTemplates" class="lui-list__item">
+    					<span class="lui-list__text">
+						<div class="PreviewListLeft">
+						{{template.type}}
+						</div>
+						<div class="PreviewListRight">
+						<label class="lui-checkbox">
+  						<input class="lui-checkbox__input" type="checkbox" aria-label="Label" ng-model="input.codeTemplates[template.id].enabled" ng-value="input.codeTemplates[template.id].enabled" />
+  						<div class="lui-checkbox__check-wrap">
+    						<span class="lui-checkbox__check"></span>
+    						<span class="lui-checkbox__check-text"><div class="iconspacer"><span class="lui-icon lui-icon--large lui-icon--library" aria-hidden="true"></span></div><div class="icontext">
+							{{template.name}}</div></span>
+  						</div>
+						</label>
+						</div>
+						</span>
+  					</li>
+					<li ng-repeat="template in input.vizTemplates" class="lui-list__item">
+    					<span class="lui-list__text">
+						<div class="PreviewListLeft">
+						Visualization
+						</div>
+						<div class="PreviewListRight">
+						<label class="lui-checkbox">
+  						<input class="lui-checkbox__input" type="checkbox" aria-label="Label" ng-model="input.vizTemplates[template.id].enabled" ng-value="input.vizTemplates[template.id].enabled" />
+  						<div class="lui-checkbox__check-wrap">
+    						<span class="lui-checkbox__check"></span>
+    						<span class="lui-checkbox__check-text"><div class="iconspacer"><span class="lui-icon lui-icon--large lui-icon--{{template.vizicon}}" aria-hidden="true"></span></div><div class="icontext">
+							{{template.title}}</div></span>
+  						</div>
+						</label>
+						</div>
+						</span>
+  					</li>
+				</ul>
+
+			</div>
+
+			</lui-dialog-body>
+		</lui-tab-content>
+		<lui-tab-content ref="tab2">
+		<lui-dialog-header>
+    			<lui-dialog-title>Qlik Expression Code Sample</lui-dialog-title>
+  			</lui-dialog-header>
+  			<lui-dialog-body>
+				<ul class="lui-list">
+  					<div ng-repeat="template in input.codeTemplates"  ng-if="template.enabled">
+					<li class="lui-list__header">
+    					<span class="lui-list__text">{{template.name}}</span>
+  					</li>
+					<li class="lui-list__item">
+    					<span class="lui-list__text">
+						<div class="PreviewListLeft">
+						Description:
+						</div>
+						<div class="PreviewListRight CodePreview">
+						<span class="">{{template.description}}</span>
+						</div>
+						</span>
+  					</li>
+  					<li class="lui-list__item">
+    					<span class="lui-list__text">
+						<div class="PreviewListLeft">
+						Expression:
+						</div>
+						<div class="PreviewListRight CodePreview">
+						<span class="CodePreview-code">{{template.outCode}}</span>
+						</div>
+						</span>
+  					</li>
+					</div>
+				</ul>
+
+
+
+
+		</lui-dialog-body>
+		</lui-tab-content>
+	</lui-tab-view>
+	</lui-dialog-body>
+	<lui-dialog-footer>
+    	<button class="lui-button  lui-dialog__footer-button" ng-click="previewMeasures();">Preview Master Items</button>
+		<button class="lui-button  lui-dialog__footer-button" ng-click="createItems();">Create Master Items</button>
+		<button class="lui-button  lui-dialog__footer-button" ng-click="close();">Close</button>
+  		</lui-dialog-footer>
+</lui-dialog>

@@ -1,0 +1,15 @@
+{
+	"name": "AAI Expression Builder",
+	"description": "Wizard to create measures using common R functions for Advanced Analytics",
+	"type": "visualization",
+	"version": "1.0.0",
+	"icon": "effects",
+	"author": "Steven Pressland",
+	"homepage": "http://analytics.earth",
+	"keywords": "qlik-sense, visualization, advanced analytics extensions",
+	"license": "",
+	"repository": "",
+	"dependencies": {
+		"qlik-sense": ">=3.0.x"
+	}
+}

@@ -1,0 +1,115 @@
+/* CSS */
+
+.qv-object-aeRWizard > .qv-object-nav{
+  display: none;
+}
+
+.extensionFrame {
+	height:100%;
+	width:100%;
+	display:table;
+	min-width:207px;
+	min-height:118px;
+}
+
+.wizarddialog {
+	min-width: 900px;
+	max-width: 900px;
+	min-height: 800px;
+	max-height: 800px;
+}
+
+.wizarddialogbody {
+	padding: 0px;
+}
+
+.wizardmarginabove {
+	margin-top:10px;
+}
+
+.wizardSelectHeader {
+	height: 80px;
+}
+
+.wizardtitle {
+	font-size: 1.2em;
+	margin-top: 10px;
+	margin-bottom:10px;
+}
+
+.wizardtitlespacer {
+	height: 50px;
+}
+
+.PreviewListLeft {
+	width: 20%;
+	float: left;
+	clear: both;
+	font-weight: bold;
+	padding-top:10px;
+}
+.PreviewListRight {
+	float: left;
+	clear: none;
+}
+
+.CodePreview {
+	padding:10px;
+}
+
+.CodePreview-code {
+	font-family: Courier, monospace;
+	font-size: 13px;
+
+}
+
+.InputAlignLeft {
+	float:left;
+	clear:none;
+	padding-right:10px;
+	min-width:200px;
+}
+
+.inputPlaceholder {
+	text-align: center;
+	font-weight: bold;
+	font-size: 1.2em;
+	padding-top: 200px;
+}
+
+.placeholderIcon {
+	font-size: 50px;
+	padding-bottom: 20px;
+}
+
+.inputPlaceholderSheet {
+	text-align: center;
+	font-weight: bold;
+	font-size: 1.1em;
+	padding: 5px;
+	height:100%;
+    display:table-cell;
+    vertical-align:middle;
+    text-align:center;
+}
+
+.placeholderIconSheet {
+	font-size: 20px;
+	padding-bottom: 5px;
+}
+
+.placeholderButtonSheet {
+	margin-top: 5px;
+}
+
+
+.iconspacer {
+	margin-left:10px;
+	width: 50px;
+	float: left;
+}
+
+.icontext {
+	float: left;
+	clear: none;
+}
