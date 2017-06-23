@@ -12,8 +12,17 @@ define( [], function () {
 					}
 				}
 			}
+			includeBeta: includeBeta
 		}
 	};
+
+	var includeBeta = {
+		ref: "props.includeBeta",
+		label: "Include Beta Functions",
+		type: "boolean",
+		component: "switch",
+		defaultValue: false
+	}
 
 	// *****************************************************************************
 	// Main properties panel definition

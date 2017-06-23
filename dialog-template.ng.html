@@ -12,7 +12,7 @@
 			<lui-dialog-header class="wizardSelectHeader">
 			<lui-dialog-title>Select Advanced Analytics Function:</lui-dialog-title>
     			<lui-select x-model="selectedWizard" ng-change="changeWizard(selectedWizard)">
-					<option ng-if="wiz.status == 'live'" ng-repeat="wiz in input.wizardList" value="{{wiz.index}}">{{wiz.name}}</option>
+					<option ng-if="wiz.status == 'live' || layout.props.includeBeta" ng-repeat="wiz in input.wizardList" value="{{wiz.index}}">{{wiz.name}}</option>
 				</lui-select>
   			</lui-dialog-header>
   			<lui-dialog-body>
