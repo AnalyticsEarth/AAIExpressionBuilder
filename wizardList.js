@@ -6,6 +6,7 @@ define( [], function () {
 		{
 			index:0,
 			name:'Hello World',
+			status:'live',
 			parameters:[
 				{
 					index:0,
@@ -45,6 +46,7 @@ define( [], function () {
 		{
 			index:1,
 			name:'Holt Winters Forecast',
+			status:'beta',
 			parameters:[
 				{
 					index:0,
@@ -92,6 +94,7 @@ define( [], function () {
 		{
 			index:2,
 			name:'K-means Cluster',
+			status:'live',
 			parameters:[
 				{
 					index:0,
