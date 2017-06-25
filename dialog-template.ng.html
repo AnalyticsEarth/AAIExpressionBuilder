@@ -50,9 +50,10 @@
 
 							<span class="InputAlignLeft" ng-if="par.includedateagg">
 								<lui-select x-model="input.uiarray[par.index].dateaggvalue" ng-value="input.uiarray[par.index].dateaggvalue">
-									<option ng-repeat="agg in input.dateAggList" value="{{agg.level}}">{{agg.level}}</option>
+									<option ng-repeat="agg in input.dateAggList" value="{{agg.level}}">{{agg.level}} (frequency: {{agg.frequency}})</option>
 								</lui-select>
 							</span>
+							<div class="PreviewListRightHint">{{par.hint}}</div>
 						</div>
 						</span>
   					</li>

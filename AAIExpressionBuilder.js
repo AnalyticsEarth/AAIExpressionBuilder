@@ -169,26 +169,39 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 								var rScript = t.rscript;
 								var qParams = '';
 								$scope.input.uiarray.forEach(function(p){
+									//Replace Field with a dataframe column parameter
 									var regExp = new RegExp('##<'+p.scriptid+'>##','g');
 									rScript = rScript.replace(regExp,p.scriptid);
 
-									var regExpParam = new RegExp('!!<'+p.scriptid+'>!','g');
+									//Replace With fieldname as is a Qlik native script function
+									var regExp2 = new RegExp('#!<'+p.scriptid+'>!#','g');
+									rScript = rScript.replace(regExp2,'['+p.inputvalue+']');
+
+									//Date Parameter fields replaced with a parameter ralated to the field selection
+									var regExpString = '!!<'+p.scriptid+'>!';
+									var regExpParam = new RegExp(regExpString,'g');
 									var match;
 									while ((match = regExpParam.exec(rScript)) != null) {
     								console.log("match found at " + match.index);
+										console.log(p);
 										if(p.includedateagg){
 											//We can expect the parameter after the scriptid match to be a parameter from the dateAggList
 
-											var indexEndOfParameter = rScript.indexOf('!',match.index);
+											var indexEndOfParameter = rScript.indexOf('!',match.index+regExpString.length);
 											console.log(indexEndOfParameter);
-											var parameterName = rScript.substring(match.index,indexEndOfParameter - match.index);
+											var parameterName = rScript.substring(match.index+regExpString.length,indexEndOfParameter);
 											console.log(parameterName);
 
 											//Get Date Agg Items
 											$scope.input.dateAggList.forEach(function(entry){
-												if(p.dateaggvalue == entry.value){
+												console.log(entry);
+												if(p.dateaggvalue == entry.level){
 													//Then check the
+													console.log('Match with: ' + entry.level)
 													console.log(entry[parameterName]);
+													var replaceString = regExpString + parameterName + '!';
+													console.log(replaceString);
+													rScript = rScript.replace(replaceString,entry[parameterName]);
 												}
 											});
 										}
@@ -295,12 +308,12 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 							Promise.all(p).then(values => {
 								console.log($scope.input.dimList);
 								console.log($scope.input.measureList);
-								$scope.input.vizTemplates.forEach(function(v){
-									$scope.createMasterViz(v);
-								});
-
+								if($scope.input.vizTemplates){
+									$scope.input.vizTemplates.forEach(function(v){
+										$scope.createMasterViz(v);
+									});
+								}
 							});
-
 						};
 
 						/* Create Dimension */

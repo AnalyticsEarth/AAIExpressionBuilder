@@ -51,6 +51,13 @@
 .PreviewListRight {
 	float: left;
 	clear: none;
+  width: 80%;
+}
+.PreviewListRightHint {
+  clear: both;
+  float: left;
+  font-style: italic;
+  padding-bottom: 5px;
 }
 
 .CodePreview {
