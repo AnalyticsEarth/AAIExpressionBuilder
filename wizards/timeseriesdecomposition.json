@@ -1,0 +1,45 @@
+{
+  "index":2,
+  "name":"Time Series Decomposition",
+  "status":"beta",
+  "parameters":[
+    {
+      "index":0,
+      "type":"fieldselect",
+      "tag":"$date",
+      "includedateagg":true,
+      "includeinfunction":false,
+      "scriptid":"date1",
+      "name":"Date Field",
+      "hint":"Select the date field and the level of granualarity in the source data"
+    },
+    {
+      "index":1,
+      "type":"fieldselect",
+      "tag":"$numeric",
+      "includeagg":true,
+      "includeinfunction":true,
+      "scriptid":"agg1",
+      "name":"Aggregation"
+    }
+  ],
+  "templates":[
+    {
+      "id":"0",
+      "type":"Measure",
+      "name":"Trend",
+      "description":"The trend component from the timeseries",
+      "scriptType":"R",
+      "qlikfunction":"R.ScriptEval",
+      "rscript":"timeseries <- ts(q$agg1, start=c($(=YEAR(MIN(##<date1>##))),$(=NUM(MONTH(MIN(##<date1>##))))), frequency=!!<date1>!frequency!, end=c($(=YEAR(MAX(##<date1>##))),$(=NUM(MONTH(MAX(##<date1>##)))))); decom <- decompose(timeseries); decom$trend;"
+    },
+    {
+      "id":"1",
+      "type":"Dimension",
+      "name":"Time Series Dimension",
+      "description":"The time series dimension",
+      "scriptType":"nativedate",
+      "idForDate":"date1"
+    }
+  ]
+}

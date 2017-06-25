@@ -1,0 +1,42 @@
+{
+  "index":0,
+  "name":"Hello World",
+  "status":"live",
+  "parameters":[
+    {
+      "index":0,
+      "type":"fieldselect",
+      "tag":"$numeric",
+      "includeinfunction":true,
+      "scriptid":"numeric1",
+      "name":"Numeric Field"
+    }
+  ],
+  "templates":[
+    {
+      "id":"0",
+      "name":"Hello World",
+      "type":"Measure",
+      "description":"Sample R expressions built using R Wizard",
+      "scriptType":"R",
+      "qlikfunction":"R.ScriptAggr",
+      "rscript":"sum(na.omit(q$##<numeric1>##))"
+    }
+  ],
+  "viz":[
+    {
+      "id":"0",
+      "type":"kpi",
+      "vizicon":"kpi",
+      "title":"R Calculated Sum - KPI",
+      "description":"KPI Object containing an R aggregation of the source data",
+      "replacements":[
+        {
+          "template":"0",
+          "path":"qHyperCubeDef.qMeasures[0]",
+          "key":"qLibraryId"
+        }
+      ]
+    }
+  ]
+}
