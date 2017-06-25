@@ -34,7 +34,8 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 						wizardName: '',
 						wizardList: $scope.wizardList,
 						appModel: $scope.component.model.app,
-						layout: $scope.layout
+						layout: $scope.layout,
+						isLoading: false
 					},
 					controller: ['$scope', function( $scope ) {
 						console.log($scope);
@@ -96,28 +97,39 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 						$scope.loadUI = function(wizKey){
 							$scope.input.uiarray = null;
 							$scope.input.codeTemplates = null;
+							$scope.input.isLoading = true;
+							if($scope.input.wizardList[wizKey].config){
+								require(['text!../extensions/AAIExpressionBuilder/wizards/'+ $scope.input.wizardList[wizKey].config + '.json'], function(wizardConfig) {
+									//$(function() {
+									console.log(wizardConfig);
+									//});
+								//});
+								//$.getJSON('../extensions/AAIExpressionBuilder/wizards/' + $scope.input.wizardList[wizKey].config + '.json', function(response){
+									var response = JSON.parse(wizardConfig);
+									console.log(response);
+									/* Parameters List */
+									$scope.input.uiarray = response.parameters;
+									$scope.input.uiarray.forEach(function(entry){
+										entry.inputvalue = '';
+									});
 
-							$.getJSON('../extensions/AAIExpressionBuilder/wizards/' + $scope.input.wizardList[wizKey].config + '.json', function(response){
-								/* Parameters List */
-								$scope.input.uiarray = response.parameters;
-								$scope.input.uiarray.forEach(function(entry){
-									entry.inputvalue = '';
-								});
-
-								/* Master Items to be created list */
-								$scope.input.codeTemplates = response.templates;
-								$scope.input.codeTemplates.forEach(function(entry){
-									entry.enabled = true;
-								});
-
-								/* Visualizations to be created list */
-								$scope.input.vizTemplates = response.viz;
-								if($scope.input.vizTemplates){
-									$scope.input.vizTemplates.forEach(function(entry){
+									/* Master Items to be created list */
+									$scope.input.codeTemplates = response.templates;
+									$scope.input.codeTemplates.forEach(function(entry){
 										entry.enabled = true;
 									});
-								}
-							};
+
+									/* Visualizations to be created list */
+									$scope.input.vizTemplates = response.viz;
+									if($scope.input.vizTemplates){
+										$scope.input.vizTemplates.forEach(function(entry){
+											entry.enabled = true;
+										});
+									}
+									$scope.input.isLoading = false;
+									$scope.$apply();
+								});
+							}
 						};
 
 						/* Called when the template parameters need to be turned into the
@@ -126,7 +138,7 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 							$scope.input.codeTemplates.forEach(function(t){
 
 								/* Process R scripts */
-								if(t.scriptType == 'r'){
+								if(t.scriptType.toUpperCase() == 'R'){
 									$scope.rScriptTemplate(t);
 								}
 

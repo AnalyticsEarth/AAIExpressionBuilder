@@ -51,9 +51,9 @@
       "type":"Measure",
       "name":"Cluster Number",
       "description":"Returns a K-Means cluster number which is best used as a Color By Measure option",
-      "scriptType":"r",
+      "scriptType":"R",
       "qlikfunction":"R.ScriptEval",
-      "rscript":"clusterdata <- data.frame(q$##<measure1>##,q$##<measure2>##);clusterdata[is.na(clusterdata)] <- 0;set.seed(20); cluster <- kmeans(clusterdata,4,nstart = 20);cluster$cluster;",
+      "rscript":"clusterdata <- data.frame(q$##<measure1>##,q$##<measure2>##);clusterdata[is.na(clusterdata)] <- 0;set.seed(20); cluster <- kmeans(clusterdata,4,nstart = 20);cluster$cluster;"
     },
     {
       "id":"3",
