@@ -15,14 +15,6 @@ define( [], function () {
 		}
 	};
 
-	var includeBeta = {
-		ref: "props.includeBeta",
-		label: "Include Beta Functions",
-		type: "boolean",
-		component: "switch",
-		defaultValue: false
-	};
-
 	var aaiSettings = {
 		component: "expandable-items",
 		label: "AAI Expression Builder",
@@ -31,7 +23,18 @@ define( [], function () {
 				type: "items",
 				label: "Settings",
 				items: {
-					beta: includeBeta
+					beta: {
+						ref: "props.includeBeta",
+						label: "Include Beta Functions",
+						type: "boolean",
+						defaultValue: false
+					},
+					allFields: {
+						ref: "props.allFields",
+						label: "Show All Fields",
+						type: "boolean",
+						defaultValue: false
+					}
 				}
 			}
 		}

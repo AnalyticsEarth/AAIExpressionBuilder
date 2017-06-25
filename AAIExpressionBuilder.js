@@ -20,6 +20,9 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 		definition: definition,
 		controller: ['$scope','luiDialog', function ( $scope, luiDialog) {
 			$scope.wizardList = wizardList;
+			$scope.layout = $scope.$parent.layout;
+			console.log($scope);
+
 
 			/* This function opens the dialog window when the openWizard() function
 			is called */
@@ -30,14 +33,17 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 						selectedKey: '',
 						wizardName: '',
 						wizardList: $scope.wizardList,
-						appModel: $scope.component.model.app
+						appModel: $scope.component.model.app,
+						layout: $scope.layout
 					},
 					controller: ['$scope', function( $scope ) {
+						console.log($scope);
 
 						/* Get current Qlik App and field list */
 						var app = qlik.currApp(this);
 						app.getList("FieldList", function(reply){
 							$scope.input.fieldList = reply;
+							console.log(reply);
 						});
 
 						/* This utility function is called when conversion a written JSON
@@ -74,8 +80,8 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 						$scope.input.idList = [];
 						$scope.input.aggList = ['Count','Sum','Min','Max','Avg'];
 						$scope.input.dateAggList = [
-							{level:'Week', frequency:52, function:'weekno(##DATE##)'},
-							{level:'Month', frequency:12, function:'month(##DATE##)'}
+							{level:'Week', frequency:52},
+							{level:'Month', frequency:12}
 						];
 
 						/* Function called when the selected wizard is changed using the
@@ -105,9 +111,11 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 
 							/* Visualizations to be created list */
 							$scope.input.vizTemplates = $scope.input.wizardList[wizKey].viz;
-							$scope.input.vizTemplates.forEach(function(entry){
-								entry.enabled = true;
-							});
+							if($scope.input.vizTemplates){
+								$scope.input.vizTemplates.forEach(function(entry){
+									entry.enabled = true;
+								});
+							}
 						};
 
 						/* Called when the template parameters need to be turned into the
@@ -150,6 +158,28 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 									var regExp = new RegExp('##<'+p.scriptid+'>##','g');
 									rScript = rScript.replace(regExp,p.scriptid);
 
+									var regExpParam = new RegExp('!!<'+p.scriptid+'>!','g');
+									var match;
+									while ((match = regExpParam.exec(rScript)) != null) {
+    								console.log("match found at " + match.index);
+										if(p.includedateagg){
+											//We can expect the parameter after the scriptid match to be a parameter from the dateAggList
+
+											var indexEndOfParameter = rScript.indexOf('!',match.index);
+											console.log(indexEndOfParameter);
+											var parameterName = rScript.substring(match.index,indexEndOfParameter - match.index);
+											console.log(parameterName);
+
+											//Get Date Agg Items
+											$scope.input.dateAggList.forEach(function(entry){
+												if(p.dateaggvalue == entry.value){
+													//Then check the
+													console.log(entry[parameterName]);
+												}
+											});
+										}
+									}
+
 									if(p.includeinfunction){
 										if(qParams != ''){
 											qParams = qParams + ', ';
@@ -180,7 +210,8 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 								//Would be better with a match, but looping for the moment!
 								$scope.input.uiarray.forEach(function(p){
 									if(p.scriptid == t.idForDate){
-										output = p.dateaggvalue + '([' + p.inputvalue + '])';
+										//output = p.dateaggvalue + '([' + p.inputvalue + '])';
+										output = '[' + p.inputvalue + ']';
 									}
 								});
 								t.outCode = output;
