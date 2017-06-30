@@ -124,6 +124,7 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 									$scope.input.codeTemplates = response.templates;
 									$scope.input.codeTemplates.forEach(function(entry){
 										entry.enabled = true;
+										entry.built = false;
 									});
 
 									/* Visualizations to be created list */
@@ -131,6 +132,7 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 									if($scope.input.vizTemplates){
 										$scope.input.vizTemplates.forEach(function(entry){
 											entry.enabled = true;
+											entry.built = false;
 										});
 									}
 									$scope.input.vizDisabled = false;
@@ -315,22 +317,6 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 
 						/* Create Master Items */
 						$scope.createMasterItems = function(){
-							if($scope.previewMasterItems()){
-
-								var p = [];
-								$scope.input.codeTemplates.forEach(function(t){
-									console.log(t.outCode);
-									if(t.enabled){
-										if(t.type.toUpperCase() == 'DIMENSION'){
-											var a = $scope.createDimension(t.outCode, t.name, t.description, [], t.id);
-											p.push(a);
-										}
-										if(t.type.toUpperCase() == 'MEASURE'){
-											var a = $scope.createMeasure(t.outCode, t.name, t.description, [], t.id);
-											p.push(a);
-										}
-									}
-								});
 
 								/* Only process after all promises have competed */
 								Promise.all(p).then(values => {
@@ -350,7 +336,7 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 						};
 
 						/* Create Dimension */
-						$scope.createDimension = function(aeExpression, aeTitle, aeDescription, aeTags, aeTemplateId){
+						$scope.createDimension = function(t){
 							var dimJSON =
 							{
 								qInfo: {
@@ -359,50 +345,52 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 								qDim: {
 									qGrouping: "N",
 									qFieldDefs: [
-										aeExpression
+										t.outCode
 									],
 									qFieldLabels: [
-										aeTitle
+										t.name
 									],
-									title:aeTitle
+									title:t.name
 								},
 								qMetaDef: {
-									title:aeTitle,
-									description:aeDescription,
-									tags:aeTags
+									title:t.name,
+									description:t.description,
+									tags:[]
 								}
 							};
 
 							return $scope.input.appModel.createDimension(dimJSON).then((data) => {
-								var obj = {templateId:aeTemplateId,qixId:data.id};
+								var obj = {templateId:t.id,qixId:data.id};
 								$scope.input.idList.push(obj);
+								t.built = true;
 							});
 						};
 
 						/* Create Measure */
-						$scope.createMeasure = function(aeExpression, aeTitle, aeDescription, aeTags, aeTemplateId){
+						$scope.createMeasure = function(t){
 							var mesJSON =
 							{
 								qInfo: {
 									qType: "measure"
 								},
 								qMeasure: {
-									qLabel:aeTitle,
+									qLabel:t.name,
 									qGrouping: "N",
-									qDef: aeExpression,
+									qDef: t.outCode,
 									qExpressions:[],
 									qActiveExpression: 0
 								},
 								qMetaDef: {
-									title:aeTitle,
-									description:aeDescription,
-									tags:aeTags
+									title:t.name,
+									description:t.description,
+									tags:[]
 								}
 							};
 
 							return $scope.input.appModel.createMeasure(mesJSON).then((data) => {
-								var obj = {templateId:aeTemplateId,qixId:data.id};
+								var obj = {templateId:t.id,qixId:data.id};
 								$scope.input.idList.push(obj);
+								t.built = true;
 							});
 						};
 

@@ -1,7 +1,7 @@
 {
   "index":2,
   "name":"Time Series Decomposition",
-  "status":"beta",
+  "status":"live",
   "parameters":[
     {
       "index":0,
