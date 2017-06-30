@@ -18,7 +18,7 @@ define( [], function () {
 		{
 			index:2,
 			name:'Time Series Decomposition',
-			status:'beta',
+			status:'live',
 			config:'timeseriesdecomposition'
 		}
 	]

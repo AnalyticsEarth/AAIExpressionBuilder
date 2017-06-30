@@ -123,20 +123,19 @@
   					</li>
   					<li class="lui-list__item">
     					<span class="lui-list__text">
-						<div class="PreviewListLeft">
-						Expression:
-						</div>
-						<div class="PreviewListRight CodePreview">
-						<span class="CodePreview-code">{{template.outCode}}</span>
-						</div>
-						</span>
+								<div class="PreviewListLeft">
+									Expression:
+								</div>
+								<div class="PreviewListRight CodePreview">
+									<span class="CodePreview-code">{{template.outCode}}</span>
+								</div>
+								<div class="CompletedTick">
+									<span ng-show="template.built" class="lui-icon lui-icon--large lui-icon--tick" aria-hidden="true"></span>
+								</div>
+							</span>
   					</li>
 					</div>
 				</ul>
-
-
-
-
 		</lui-dialog-body>
 		</lui-tab-content>
 	</lui-tab-view>
