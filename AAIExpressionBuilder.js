@@ -35,7 +35,8 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 						wizardList: $scope.wizardList,
 						appModel: $scope.component.model.app,
 						layout: $scope.layout,
-						isLoading: false
+						isLoading: false,
+						enableVizBuild: true
 					},
 					controller: ['$scope', function( $scope ) {
 						console.log($scope);
@@ -93,6 +94,18 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 							$scope.loadUI(wizKey);
 						};
 
+						//When any of the measures and dimensions are de-selected we must not produce visualizations as these will be incomplete
+						$scope.$watch("input.codeTemplates", function(newValue, oldValue) {
+							if(newValue){
+								$scope.input.vizDisabled = false;
+								newValue.forEach(function(entry){
+									if(entry.enabled == false){
+										$scope.input.vizDisabled = true;
+									}
+								});
+							}
+  					}, true);
+
 						/* Loads the UI when a change to the wizard is made */
 						$scope.loadUI = function(wizKey){
 							$scope.input.uiarray = null;
@@ -100,13 +113,7 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 							$scope.input.isLoading = true;
 							if($scope.input.wizardList[wizKey].config){
 								require(['text!../extensions/AAIExpressionBuilder/wizards/'+ $scope.input.wizardList[wizKey].config + '.json'], function(wizardConfig) {
-									//$(function() {
-									console.log(wizardConfig);
-									//});
-								//});
-								//$.getJSON('../extensions/AAIExpressionBuilder/wizards/' + $scope.input.wizardList[wizKey].config + '.json', function(response){
 									var response = JSON.parse(wizardConfig);
-									console.log(response);
 									/* Parameters List */
 									$scope.input.uiarray = response.parameters;
 									$scope.input.uiarray.forEach(function(entry){
@@ -126,6 +133,7 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 											entry.enabled = true;
 										});
 									}
+									$scope.input.vizDisabled = false;
 									$scope.input.isLoading = false;
 									$scope.$apply();
 								});
@@ -139,25 +147,26 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 
 								/* Process R scripts */
 								if(t.scriptType.toUpperCase() == 'R'){
-									$scope.rScriptTemplate(t);
+									if(!$scope.rScriptTemplate(t)) return false;
 								}
 
 								/* Process fields generated from Qlik native date fields */
 								if(t.scriptType == 'nativedate'){
-									$scope.nativeDateTemplate(t);
+									if(!$scope.nativeDateTemplate(t)) return false;
 								}
 
 								/* Process a native Qlik field */
 								if(t.scriptType == 'nativefield'){
-									$scope.nativeFieldTemplate(t);
+									if(!$scope.nativeFieldTemplate(t)) return false;
 								}
 
 								/* Process a native Qlik aggregation field */
 								if(t.scriptType == 'nativeagg'){
-									$scope.nativeFieldAggTemplate(t);
+									if(!$scope.nativeFieldAggTemplate(t) return false;
 								}
 
 							});
+							return true;
 						};
 
 						/* R script template processing */
@@ -225,6 +234,9 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 								var output = t.qlikfunction + '(\'' + rScript + '\',' + qParams + ')';
 
 								t.outCode = output;
+								return true;
+							}else{
+								return true; //Not Enabled is no reason to fail
 							}
 						};
 
@@ -242,6 +254,9 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 									}
 								});
 								t.outCode = output;
+								return true;
+							}else{
+								return true; //Not Enabled is no reason to fail
 							}
 
 						};
@@ -259,6 +274,9 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 									}
 								});
 								t.outCode = output;
+								return true;
+							}else{
+								return true; //Not Enabled is no reason to fail
 							}
 						};
 
@@ -267,6 +285,8 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 							t.outCode = null;
 
 							if(t.enabled){
+								if(!p.aggvalue) return false;
+								if(!p.inputvalue) return false;
 								var output = '';
 								//Would be better with a match, but looping for the moment!
 								$scope.input.uiarray.forEach(function(p){
@@ -275,45 +295,58 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 									}
 								});
 								t.outCode = output;
+								return true;
+							}else{
+								return true; //Not Enabled is no reason to fail
 							}
 						};
 
 						/* Preview Master Items function, will complete each template so has to
 						be called even if preview on screen is not required */
 						$scope.previewMasterItems = function(){
-							$scope.completeTemplates();
-							$scope.make_tab_active(2);
+							if($scope.completeTemplates()){
+								$scope.make_tab_active(2);
+								return true;
+							}else{
+								//Need to do something here to notify of the failure
+								return false;
+							}
 						};
 
 						/* Create Master Items */
 						$scope.createMasterItems = function(){
-							$scope.previewMasterItems();
+							if($scope.previewMasterItems()){
 
-							var p = [];
-							$scope.input.codeTemplates.forEach(function(t){
-								console.log(t.outCode);
+								var p = [];
+								$scope.input.codeTemplates.forEach(function(t){
+									console.log(t.outCode);
+									if(t.enabled){
+										if(t.type.toUpperCase() == 'DIMENSION'){
+											var a = $scope.createDimension(t.outCode, t.name, t.description, [], t.id);
+											p.push(a);
+										}
+										if(t.type.toUpperCase() == 'MEASURE'){
+											var a = $scope.createMeasure(t.outCode, t.name, t.description, [], t.id);
+											p.push(a);
+										}
+									}
+								});
 
-								if(t.type.toUpperCase() == 'DIMENSION'){
-									var a = $scope.createDimension(t.outCode, t.name, t.description, [], t.id);
-									p.push(a);
-								}
-								if(t.type.toUpperCase() == 'MEASURE'){
-									var a = $scope.createMeasure(t.outCode, t.name, t.description, [], t.id);
-									p.push(a);
-								}
-
-							});
-
-							/* Only process after all promises have competed */
-							Promise.all(p).then(values => {
-								console.log($scope.input.dimList);
-								console.log($scope.input.measureList);
-								if($scope.input.vizTemplates){
-									$scope.input.vizTemplates.forEach(function(v){
-										$scope.createMasterViz(v);
-									});
-								}
-							});
+								/* Only process after all promises have competed */
+								Promise.all(p).then(values => {
+									console.log($scope.input.dimList);
+									console.log($scope.input.measureList);
+									if($scope.input.vizTemplates){
+										if(!$scope.input.vizDisabled){
+											$scope.input.vizTemplates.forEach(function(v){
+												$scope.createMasterViz(v);
+											});
+										}
+									}
+								});
+							}else{
+								//do something to say there was an error
+							}
 						};
 
 						/* Create Dimension */
