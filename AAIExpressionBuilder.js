@@ -37,7 +37,10 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 						layout: $scope.layout,
 						isLoading: false,
 						enableVizBuild: true,
-						previewEnabled: false
+						previewEnabled: false,
+						buttonState: 0,
+						buttonTitle: 'Preview Master Items',
+						warningMessage: ''
 					},
 					controller: ['$scope', function( $scope ) {
 						console.log($scope);
@@ -111,6 +114,8 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 						$scope.loadUI = function(wizKey){
 							$scope.input.uiarray = null;
 							$scope.input.codeTemplates = null;
+							$scope.input.vizTemplates = null;
+							$scope.input.vizDisabled = false;
 							$scope.input.isLoading = true;
 							if($scope.input.wizardList[wizKey].config){
 								require(['text!../extensions/AAIExpressionBuilder/wizards/'+ $scope.input.wizardList[wizKey].config + '.json'], function(wizardConfig) {
@@ -309,6 +314,47 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 							return complete;
 						};
 
+						$scope.processButtonClick = function(){
+							switch ($scope.input.buttonState) {
+								case 0: //Preview Master Items
+									if($scope.previewMasterItems()){
+										$scope.input.buttonState = 1;
+										$scope.input.buttonTitle = 'Create Master Items';
+										$scope.input.warningMessage = '';
+									}
+									break;
+								case 1:
+									if($scope.createMasterItems()){
+										$scope.input.buttonState = 2;
+										$scope.input.buttonTitle = 'Reset Expression Builder';
+										$scope.input.warningMessage = '';
+									}
+									break;
+								case 2:
+									if($scope.resetWizard()){
+										$scope.input.buttonState = 0;
+										$scope.input.buttonTitle = 'Preview Master Items';
+										$scope.input.warningMessage = '';
+									}
+									break;
+							}
+						};
+
+						$scope.resetWizard = function(){
+							console.log("Reset Wizard");
+							$scope.input.selectedKey = '';
+							$scope.input.wizardName = '';
+							$scope.input.uiarray = null;
+							$scope.input.codeTemplates = null;
+							$scope.input.vizTemplates = null;
+							$scope.input.vizDisabled = false;
+							$scope.input.isLoading = false,
+							$scope.input.enableVizBuild = true,
+							$scope.input.previewEnabled = false,
+							$scope.make_tab_active(1);
+							return true;
+						}
+
 						/* Preview Master Items function, will complete each template so has to
 						be called even if preview on screen is not required */
 						$scope.previewMasterItems = function(){
@@ -319,6 +365,7 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 							}else{
 								//Need to do something here to notify of the failure
 								console.log("Validation Check Fail");
+								$scope.input.warningMessage = "Complete all required parameters";
 								return false;
 							}
 						};
@@ -351,8 +398,10 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 										}
 									}
 								});
+								return true;
 							}else{
 								//do something to say there was an error
+								return false;
 							}
 						};
 

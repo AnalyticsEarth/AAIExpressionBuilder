@@ -141,8 +141,8 @@
 	</lui-tab-view>
 	</lui-dialog-body>
 	<lui-dialog-footer>
-    	<button class="lui-button  lui-dialog__footer-button" ng-click="previewMasterItems();">Preview Master Items</button>
-		<button class="lui-button  lui-dialog__footer-button" ng-class="{'lui-disabled': input.previewEnabled == false}" ng-click="createMasterItems();">Create Master Items</button>
+		<div class="warningLeft">{{input.warningMessage}}</div>
+    <button class="lui-button  lui-dialog__footer-button" ng-click="processButtonClick();">{{input.buttonTitle}}</button>
 		<button class="lui-button  lui-dialog__footer-button" ng-click="close();">Close</button>
-  		</lui-dialog-footer>
+  </lui-dialog-footer>
 </lui-dialog>
