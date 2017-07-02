@@ -36,7 +36,8 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 						appModel: $scope.component.model.app,
 						layout: $scope.layout,
 						isLoading: false,
-						enableVizBuild: true
+						enableVizBuild: true,
+						previewEnabled: false
 					},
 					controller: ['$scope', function( $scope ) {
 						console.log($scope);
@@ -145,30 +146,35 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 						/* Called when the template parameters need to be turned into the
 						Qlik expression that is required for the master item */
 						$scope.completeTemplates = function(){
+							var errorCounter = 0;
 							$scope.input.codeTemplates.forEach(function(t){
 
 								/* Process R scripts */
 								if(t.scriptType.toUpperCase() == 'R'){
-									if(!$scope.rScriptTemplate(t)) return false;
+									if(!$scope.rScriptTemplate(t)) errorCounter++;
 								}
 
 								/* Process fields generated from Qlik native date fields */
 								if(t.scriptType == 'nativedate'){
-									if(!$scope.nativeDateTemplate(t)) return false;
+									if(!$scope.nativeDateTemplate(t)) errorCounter++;
 								}
 
 								/* Process a native Qlik field */
 								if(t.scriptType == 'nativefield'){
-									if(!$scope.nativeFieldTemplate(t)) return false;
+									if(!$scope.nativeFieldTemplate(t)) errorCounter++;
 								}
 
 								/* Process a native Qlik aggregation field */
 								if(t.scriptType == 'nativeagg'){
-									if(!$scope.nativeFieldAggTemplate(t) return false;
+									if(!$scope.nativeFieldAggTemplate(t)) errorCounter++;
 								}
 
 							});
-							return true;
+							if(errorCounter > 0){
+								return false;
+							}{
+								return true;
+							}
 						};
 
 						/* R script template processing */
@@ -285,32 +291,34 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 						/* Native Aggregation functions */
 						$scope.nativeFieldAggTemplate = function(t){
 							t.outCode = null;
-
+							var complete = true;
 							if(t.enabled){
-								if(!p.aggvalue) return false;
-								if(!p.inputvalue) return false;
+
 								var output = '';
 								//Would be better with a match, but looping for the moment!
 								$scope.input.uiarray.forEach(function(p){
 									if(p.scriptid == t.idForField){
+										if(!p.aggvalue) complete = false;
+										if(!p.inputvalue) complete = false;
 										output = p.aggvalue + '([' + p.inputvalue + '])';
 									}
 								});
 								t.outCode = output;
-								return true;
-							}else{
-								return true; //Not Enabled is no reason to fail
 							}
+							console.log(complete);
+							return complete;
 						};
 
 						/* Preview Master Items function, will complete each template so has to
 						be called even if preview on screen is not required */
 						$scope.previewMasterItems = function(){
 							if($scope.completeTemplates()){
+								$scope.input.previewEnabled = true;
 								$scope.make_tab_active(2);
 								return true;
 							}else{
 								//Need to do something here to notify of the failure
+								console.log("Validation Check Fail");
 								return false;
 							}
 						};
@@ -318,6 +326,19 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 						/* Create Master Items */
 						$scope.createMasterItems = function(){
 
+							if($scope.previewMasterItems()){
+								var p = [];
+								$scope.input.codeTemplates.forEach(function(t){
+									console.log(t.outCode);
+									if(t.type.toUpperCase() == 'DIMENSION'){
+										var a = $scope.createDimension(t);
+										p.push(a);
+									}
+									if(t.type.toUpperCase() == 'MEASURE'){
+										var a = $scope.createMeasure(t);
+										p.push(a);
+									}
+								});
 								/* Only process after all promises have competed */
 								Promise.all(p).then(values => {
 									console.log($scope.input.dimList);
