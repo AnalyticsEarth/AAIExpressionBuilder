@@ -23,7 +23,7 @@ Because the extension is only required for application development, it should be
 This way the space on your sheet can be used for important insight.
 
 ## Properties Settings
-By default the extension will look for the datatype tags in the data model when listing fields for selection. In some cases, such as with dates which have not been correctly tagged on load fields may not show up. Use the _#"Show All Fields"#_ setting in the properties panel. 
+By default the extension will look for the datatype tags in the data model when listing fields for selection. In some cases, such as with dates which have not been correctly tagged on load fields may not show up. Use the _**"Show All Fields"**_ setting in the properties panel. 
 
 ## More information
 See the WIKI for detailed information regarding this project.
