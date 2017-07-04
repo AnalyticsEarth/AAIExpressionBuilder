@@ -20,6 +20,12 @@ define( [], function () {
 			name:'Time Series Decomposition',
 			status:'live',
 			config:'timeseriesdecomposition'
+		},
+		{
+			index:3,
+			name:'Simple Linear Regression',
+			status:'beta',
+			config:'simplelinearregression'
 		}
 	]
 });

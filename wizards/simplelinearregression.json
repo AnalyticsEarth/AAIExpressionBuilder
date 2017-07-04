@@ -1,0 +1,90 @@
+{
+  "index":3,
+  "name":"Simple Linear Regression",
+  "status":"beta",
+  "parameters":[
+    {
+      "index":0,
+      "type":"fieldselect",
+      "tag":"$numeric",
+      "includeinfunction":true,
+      "scriptid":"dependent",
+      "name":"Dependent Variable"
+    },
+    {
+      "index":1,
+      "type":"fieldselect",
+      "tag":"$numeric",
+      "includeinfunction":true,
+      "scriptid":"independent",
+      "name":"Independent Variable"
+    }
+  ],
+  "templates":[
+    {
+      "id":"0",
+      "type":"Measure",
+      "name":"LM Prediction",
+      "description":"The Linear Model Prediction",
+      "scriptType":"R",
+      "qlikfunction":"R.ScriptEval",
+      "rscript":"qslm <- lm(##<dependent>## ~ ##<independent>##, q);p <- predict(qslm, q, interval=\"prediction\");p[,1];"
+    },
+    {
+      "id":"1",
+      "type":"Measure",
+      "name":"LM Lower CI",
+      "description":"The Linear Model Lower Confidence Interval",
+      "scriptType":"R",
+      "qlikfunction":"R.ScriptEval",
+      "rscript":"qslm <- lm(##<dependent>## ~ ##<independent>##, q);p <- predict(qslm, q, interval=\"confidence\");p[,2];"
+    },{
+      "id":"2",
+      "type":"Measure",
+      "name":"LM Upper CI",
+      "description":"The Linear Model Upper Confidence Interval",
+      "scriptType":"R",
+      "qlikfunction":"R.ScriptEval",
+      "rscript":"qslm <- lm(##<dependent>## ~ ##<independent>##, q);p <- predict(qslm, q, interval=\"confidence\");p[,3];"
+    },
+    {
+      "id":"3",
+      "type":"Dimension",
+      "name":"Independent Variable",
+      "description":"The Independent Variable",
+      "scriptType":"nativefield",
+      "idForField":"independent"
+    }
+  ],
+  "viz":[
+    {
+      "id":"0",
+      "type":"decomline",
+      "vizicon":"line-chart",
+      "title":"Simple Linear Regression",
+      "description":"Simple Linear Regression",
+      "replacements":[
+        {
+          "template":"3",
+          "path":"qHyperCubeDef.qDimensions[0]",
+          "key":"qLibraryId"
+        },
+        {
+          "template":"0",
+          "path":"qHyperCubeDef.qMeasures[0]",
+          "key":"qLibraryId"
+        },
+        {
+          "template":"1",
+          "path":"qHyperCubeDef.qMeasures[1]",
+          "key":"qLibraryId"
+        },
+        {
+          "template":"2",
+          "path":"qHyperCubeDef.qMeasures[2]",
+          "key":"qLibraryId"
+        }
+      ]
+    }
+  ]
+}
