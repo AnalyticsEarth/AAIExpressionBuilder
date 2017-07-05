@@ -24,7 +24,7 @@ define( [], function () {
 		{
 			index:3,
 			name:'Simple Linear Regression',
-			status:'beta',
+			status:'live',
 			config:'simplelinearregression'
 		}
 	]

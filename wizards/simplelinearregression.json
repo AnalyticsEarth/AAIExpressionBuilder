@@ -1,15 +1,17 @@
 {
   "index":3,
   "name":"Simple Linear Regression",
-  "status":"beta",
+  "status":"live",
   "parameters":[
     {
       "index":0,
       "type":"fieldselect",
       "tag":"$numeric",
       "includeinfunction":true,
+      "includeagg":true,
       "scriptid":"dependent",
-      "name":"Dependent Variable"
+      "name":"Dependent Variable",
+      "hint":"This will form the vertical axis of the chart"
     },
     {
       "index":1,
@@ -17,7 +19,8 @@
       "tag":"$numeric",
       "includeinfunction":true,
       "scriptid":"independent",
-      "name":"Independent Variable"
+      "name":"Independent Variable",
+      "hint":"This will form the horizontal axis of the chart" 
     }
   ],
   "templates":[
@@ -38,7 +41,8 @@
       "scriptType":"R",
       "qlikfunction":"R.ScriptEval",
       "rscript":"qslm <- lm(##<dependent>## ~ ##<independent>##, q);p <- predict(qslm, q, interval=\"confidence\");p[,2];"
-    },{
+    },
+    {
       "id":"2",
       "type":"Measure",
       "name":"LM Upper CI",
@@ -49,6 +53,14 @@
     },
     {
       "id":"3",
+      "type":"Measure",
+      "name":"Dependent Variable",
+      "description":"The Linear Model Dependant Variable",
+      "scriptType":"nativeagg",
+      "idForField":"dependent"
+    },
+    {
+      "id":"4",
       "type":"Dimension",
       "name":"Independent Variable",
       "description":"The Independent Variable",
@@ -59,29 +71,34 @@
   "viz":[
     {
       "id":"0",
-      "type":"decomline",
-      "vizicon":"line-chart",
+      "type":"combolinearreg",
+      "vizicon":"combo-chart",
       "title":"Simple Linear Regression",
       "description":"Simple Linear Regression",
       "replacements":[
         {
-          "template":"3",
+          "template":"4",
           "path":"qHyperCubeDef.qDimensions[0]",
           "key":"qLibraryId"
         },
         {
-          "template":"0",
+          "template":"3",
           "path":"qHyperCubeDef.qMeasures[0]",
           "key":"qLibraryId"
         },
         {
-          "template":"1",
+          "template":"0",
           "path":"qHyperCubeDef.qMeasures[1]",
           "key":"qLibraryId"
         },
         {
-          "template":"2",
+          "template":"1",
           "path":"qHyperCubeDef.qMeasures[2]",
+          "key":"qLibraryId"
+        },
+        {
+          "template":"2",
+          "path":"qHyperCubeDef.qMeasures[3]",
           "key":"qLibraryId"
         }
       ]

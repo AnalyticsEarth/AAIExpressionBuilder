@@ -174,6 +174,12 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 									if(!$scope.nativeFieldAggTemplate(t)) errorCounter++;
 								}
 
+								/* Process a native Qlik aggregation field */
+								//TODO: Implement this function for native calcs and switch this on
+								if(t.scriptType == 'nativecalc'){
+									if(!$scope.nativeFieldCalcTemplate(t)) errorCounter++;
+								}
+
 							});
 							if(errorCounter > 0){
 								return false;

@@ -28,10 +28,10 @@
 			<ul class="lui-list">
 					<li ng-repeat="par in input.uiarray" class="lui-list__item">
     					<span class="lui-list__text">
-						<div class="PreviewListLeft">
+						<div class="EntryListLeft">
 						{{par.name}}
 						</div>
-						<div class="PreviewListRight">
+						<div class="EntryListRight">
 							<span class="InputAlignLeft" ng-if="par.type == 'freeform'">
 								<input ng-model="input.uiarray[par.index].inputvalue" ng-value="input.uiarray[par.index].inputvalue" class="lui-input"/>
 							</span>
@@ -53,7 +53,7 @@
 									<option ng-repeat="agg in input.dateAggList" value="{{agg.level}}">{{agg.level}} (frequency: {{agg.frequency}})</option>
 								</lui-select>
 							</span>
-							<div class="PreviewListRightHint">{{par.hint}}</div>
+							<div class="EntryListRightHint">{{par.hint}}</div>
 						</div>
 						</span>
   					</li>
@@ -63,10 +63,10 @@
 				<ul class="lui-list">
 					<li ng-repeat="template in input.codeTemplates" class="lui-list__item">
     					<span class="lui-list__text">
-						<div class="PreviewListLeft">
+						<div class="EntryListLeft">
 						{{template.type}}
 						</div>
-						<div class="PreviewListRight">
+						<div class="EntryListRight">
 						<label class="lui-checkbox">
   						<input class="lui-checkbox__input" type="checkbox" aria-label="Label" ng-model="input.codeTemplates[template.id].enabled" ng-value="input.codeTemplates[template.id].enabled" />
   						<div class="lui-checkbox__check-wrap">
@@ -80,10 +80,10 @@
   					</li>
 					<li ng-repeat="template in input.vizTemplates" class="lui-list__item">
     					<span class="lui-list__text">
-						<div class="PreviewListLeft">
+						<div class="EntryListLeft">
 						Visualization
 						</div>
-						<div class="PreviewListRight">
+						<div class="EntryListRight">
 						<label class="lui-checkbox">
   						<input class="lui-checkbox__input" type="checkbox" aria-label="Label" ng-model="input.vizTemplates[template.id].enabled" ng-value="input.vizTemplates[template.id].enabled" ng-disabled="input.vizDisabled" />
   						<div class="lui-checkbox__check-wrap">
@@ -103,7 +103,7 @@
 		</lui-tab-content>
 		<lui-tab-content ref="tab2">
 		<lui-dialog-header>
-    			<lui-dialog-title>Qlik Expression Code Sample</lui-dialog-title>
+    			<lui-dialog-title>Qlik Expression Code Preview</lui-dialog-title>
   			</lui-dialog-header>
   			<lui-dialog-body>
 				<ul class="lui-list">
@@ -139,7 +139,7 @@
 		</lui-dialog-body>
 		</lui-tab-content>
 	</lui-tab-view>
-	</lui-dialog-body>
+</lui-dialog-body>
 	<lui-dialog-footer>
 		<div class="warningLeft">{{input.warningMessage}}</div>
     <button class="lui-button  lui-dialog__footer-button" ng-click="processButtonClick();">{{input.buttonTitle}}</button>
