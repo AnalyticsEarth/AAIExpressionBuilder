@@ -123,7 +123,12 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 									/* Parameters List */
 									$scope.input.uiarray = response.parameters;
 									$scope.input.uiarray.forEach(function(entry){
-										entry.inputvalue = '';
+										//entry.inputvalue = '';
+										entry.itemArray = [
+											{}
+										];
+										if(entry.array){
+										}
 									});
 
 									/* Master Items to be created list */
@@ -145,6 +150,18 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 									$scope.input.isLoading = false;
 									$scope.$apply();
 								});
+							}
+						};
+
+						$scope.addArrayItem = function(p){
+							p.itemArray.push({});
+							console.log(p.itemArray);
+						};
+
+						$scope.removeArrayItem = function(p,i){
+							var e = p.itemArray.indexOf(i);
+							if(e > -1) {
+								p.itemArray.splice(e,1);
 							}
 						};
 
@@ -176,9 +193,9 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 
 								/* Process a native Qlik aggregation field */
 								//TODO: Implement this function for native calcs and switch this on
-								if(t.scriptType == 'nativecalc'){
-									if(!$scope.nativeFieldCalcTemplate(t)) errorCounter++;
-								}
+								//if(t.scriptType == 'nativecalc'){
+								//	if(!$scope.nativeFieldCalcTemplate(t)) errorCounter++;
+								//}
 
 							});
 							if(errorCounter > 0){

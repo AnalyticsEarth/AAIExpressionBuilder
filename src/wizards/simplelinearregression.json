@@ -20,7 +20,8 @@
       "includeinfunction":true,
       "scriptid":"independent",
       "name":"Independent Variable",
-      "hint":"This will form the horizontal axis of the chart" 
+      "hint":"The first will form the horizontal axis of the chart, others will be included in the regression formula",
+      "array":true
     }
   ],
   "templates":[

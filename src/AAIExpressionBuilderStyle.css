@@ -106,6 +106,12 @@
 	min-width:200px;
 }
 
+.InputClearRow {
+  clear:both;
+  margin-bottom: 10px;
+  height:28px;
+}
+
 .inputPlaceholder {
 	text-align: center;
 	font-weight: bold;

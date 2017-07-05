@@ -32,27 +32,36 @@
 						{{par.name}}
 						</div>
 						<div class="EntryListRight">
-							<span class="InputAlignLeft" ng-if="par.type == 'freeform'">
-								<input ng-model="input.uiarray[par.index].inputvalue" ng-value="input.uiarray[par.index].inputvalue" class="lui-input"/>
-							</span>
+							<div class="InputClearRow"ng-repeat="i in par.itemArray">
+							<div class="InputAlignLeft" ng-if="par.type == 'freeform'">
+								<input ng-model="i.inputvalue" ng-value="i.inputvalue" class="lui-input"/>
+							</div>
 
-							<span class="InputAlignLeft" ng-if="par.type == 'fieldselect'">
-								<lui-select x-model="input.uiarray[par.index].inputvalue" ng-value="input.uiarray[par.index].inputvalue">
+							<div class="InputAlignLeft" ng-if="par.type == 'fieldselect'">
+								<lui-select x-model="i.inputvalue" ng-value="i.inputvalue">
 									<option ng-if="fld.qTags.indexOf(par.tag) !== -1 || par.tag == null || layout.props.allFields" ng-repeat="fld in input.fieldList.qFieldList.qItems" value="{{fld.qName}}">{{fld.qName}}</option>
 								</lui-select>
-							</span>
+							</div>
 
-							<span class="InputAlignLeft" ng-if="par.includeagg">
-								<lui-select x-model="input.uiarray[par.index].aggvalue" ng-value="input.uiarray[par.index].aggvalue">
+							<div class="InputAlignLeft" ng-if="par.includeagg">
+								<lui-select x-model="i.aggvalue" ng-value="i.aggvalue">
 									<option ng-repeat="agg in input.aggList" value="{{agg}}">{{agg}}</option>
 								</lui-select>
-							</span>
+							</div>
 
-							<span class="InputAlignLeft" ng-if="par.includedateagg">
-								<lui-select x-model="input.uiarray[par.index].dateaggvalue" ng-value="input.uiarray[par.index].dateaggvalue">
+							<div class="InputAlignLeft" ng-if="par.includedateagg">
+								<lui-select x-model="i.dateaggvalue" ng-value="i.dateaggvalue">
 									<option ng-repeat="agg in input.dateAggList" value="{{agg.level}}">{{agg.level}} (frequency: {{agg.frequency}})</option>
 								</lui-select>
-							</span>
+							</div>
+							<div class="InputAlignLeft" ng-if="par.array">
+								<div class="lui-buttongroup">
+									<button ng-if="par.itemArray.length > 1" class="lui-button  lui-buttongroup__button  lui-button--rounded" ng-click="removeArrayItem(par,i);"><span class="lui-button__icon  lui-icon  lui-icon--minus"></span></button>
+									<button ng-if="i == par.itemArray[par.itemArray.length-1]" class="lui-button  lui-buttongroup__button  lui-button--rounded" ng-click="addArrayItem(par);"><span class="lui-button__icon  lui-icon  lui-icon--plus"></span></button>
+								</div>
+
+							</div>
+						</div>
 							<div class="EntryListRightHint">{{par.hint}}</div>
 						</div>
 						</span>
