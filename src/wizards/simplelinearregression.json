@@ -21,7 +21,9 @@
       "scriptid":"independent",
       "name":"Independent Variable",
       "hint":"The first will form the horizontal axis of the chart, others will be included in the regression formula",
-      "array":true
+      "array":true,
+      "arrayItemDefaults":{"postoperator":"+"},
+      "scriptisformula":true
     }
   ],
   "templates":[

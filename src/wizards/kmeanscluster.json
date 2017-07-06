@@ -17,7 +17,8 @@
       "includeagg":true,
       "includeinfunction":true,
       "scriptid":"measure1",
-      "name":"Measure 1"
+      "name":"Measure 1",
+      "hint":"The measure will form the horizontal axis of the scatter plot. It will also form part of the k-means cluster operation"
     },
     {
       "index":2,
@@ -26,7 +27,9 @@
       "includeagg":true,
       "includeinfunction":true,
       "scriptid":"measure2",
-      "name":"Measure 2"
+      "name":"Measure 2",
+      "array":true,
+      "hint":"The first measure will form the vertical axis of the scatter plot. This measure and additional ones will be included in the k-means clustering operation."
     }
   ],
   "templates":[
@@ -53,7 +56,7 @@
       "description":"Returns a K-Means cluster number which is best used as a Color By Measure option",
       "scriptType":"R",
       "qlikfunction":"R.ScriptEval",
-      "rscript":"clusterdata <- data.frame(q$##<measure1>##,q$##<measure2>##);clusterdata[is.na(clusterdata)] <- 0;set.seed(20); cluster <- kmeans(clusterdata,4,nstart = 20);cluster$cluster;"
+      "rscript":"clusterdata <- q;clusterdata[is.na(clusterdata)] <- 0;set.seed(20); cluster <- kmeans(clusterdata,4,nstart = 20);cluster$cluster;"
     },
     {
       "id":"3",

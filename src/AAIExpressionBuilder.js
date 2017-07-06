@@ -40,6 +40,7 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 						previewEnabled: false,
 						buttonState: 0,
 						buttonTitle: 'Preview Master Items',
+						buttonIcon: 'view',
 						warningMessage: ''
 					},
 					controller: ['$scope', function( $scope ) {
@@ -124,11 +125,11 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 									$scope.input.uiarray = response.parameters;
 									$scope.input.uiarray.forEach(function(entry){
 										//entry.inputvalue = '';
-										entry.itemArray = [
-											{}
-										];
-										if(entry.array){
+										entry.itemArray = [];
+										if(!entry.arrayItemDefaults){
+											entry.arrayItemDefaults = {};
 										}
+										$scope.addArrayItem(entry.itemArray,entry.arrayItemDefaults);
 									});
 
 									/* Master Items to be created list */
@@ -153,15 +154,16 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 							}
 						};
 
-						$scope.addArrayItem = function(p){
-							p.itemArray.push({});
-							console.log(p.itemArray);
+						$scope.addArrayItem = function(p,d){
+							console.log(d);
+							var dnew = JSON.parse(JSON.stringify(d));
+							p.push(dnew);
 						};
 
 						$scope.removeArrayItem = function(p,i){
-							var e = p.itemArray.indexOf(i);
+							var e = p.indexOf(i);
 							if(e > -1) {
-								p.itemArray.splice(e,1);
+								p.splice(e,1);
 							}
 						};
 
@@ -205,6 +207,21 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 							}
 						};
 
+						$scope.rFormula = function(r){
+							var out = "";
+							r.itemArray.forEach(function(i){
+								var e = r.itemArray.indexOf(i) + 1;
+								var e2 = e;
+								if(e == 1) e2 = '';
+								out = out + r.scriptid + e2;
+								if(e < r.itemArray.length){
+									out = out + " " + i.postoperator + " ";
+								}
+
+							});
+							return out;
+						}
+
 						/* R script template processing */
 						$scope.rScriptTemplate = function(t){
 							t.outCode = null;
@@ -216,13 +233,17 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 								$scope.input.uiarray.forEach(function(p){
 									//Replace Field with a dataframe column parameter
 									var regExp = new RegExp('##<'+p.scriptid+'>##','g');
-									rScript = rScript.replace(regExp,p.scriptid);
+									if(p.scriptisformula){
+										rScript = rScript.replace(regExp,$scope.rFormula(p));
+									}else{
+										rScript = rScript.replace(regExp,p.scriptid);
+									}
 
 									//Replace With fieldname as is a Qlik native script function
 									var regExp2 = new RegExp('#!<'+p.scriptid+'>!#','g');
-									rScript = rScript.replace(regExp2,'['+p.inputvalue+']');
+									rScript = rScript.replace(regExp2,'['+p.itemArray[0].inputvalue+']');
 
-									//Date Parameter fields replaced with a parameter ralated to the field selection
+									//Date Parameter fields replaced with a parameter related to the field selection
 									var regExpString = '!!<'+p.scriptid+'>!';
 									var regExpParam = new RegExp(regExpString,'g');
 									var match;
@@ -240,9 +261,9 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 											//Get Date Agg Items
 											$scope.input.dateAggList.forEach(function(entry){
 												console.log(entry);
-												if(p.dateaggvalue == entry.level){
+												if(p.itemArray[0].dateaggvalue == entry.level){
 													//Then check the
-													console.log('Match with: ' + entry.level)
+													console.log('Match with: ' + entry.level);
 													console.log(entry[parameterName]);
 													var replaceString = regExpString + parameterName + '!';
 													console.log(replaceString);
@@ -253,16 +274,20 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 									}
 
 									if(p.includeinfunction){
-										if(qParams != ''){
-											qParams = qParams + ', ';
-										}
-										var expressionvalue = '';
-										if(p.includeagg){
-											expressionvalue = p.aggvalue + '([' + p.inputvalue + '])';
-										}else{
-											expressionvalue = '[' + p.inputvalue + ']';
-										}
-										qParams = qParams + expressionvalue + ' as ' + p.scriptid;
+										p.itemArray.forEach(function(i){
+											var e = p.itemArray.indexOf(i) + 1;
+											if(qParams != ''){
+												qParams = qParams + ', ';
+											}
+											var expressionvalue = '';
+											if(p.includeagg){
+												expressionvalue = i.aggvalue + '([' + i.inputvalue + '])';
+											}else{
+												expressionvalue = '[' + i.inputvalue + ']';
+											}
+											if(e == 1) e = '';
+											qParams = qParams + expressionvalue + ' as ' + p.scriptid + e;
+										});
 									}
 
 								});
@@ -286,7 +311,7 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 								$scope.input.uiarray.forEach(function(p){
 									if(p.scriptid == t.idForDate){
 										//output = p.dateaggvalue + '([' + p.inputvalue + '])';
-										output = '[' + p.inputvalue + ']';
+										output = '[' + p.itemArray[0].inputvalue + ']';
 									}
 								});
 								t.outCode = output;
@@ -306,7 +331,7 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 								//Would be better with a match, but looping for the moment!
 								$scope.input.uiarray.forEach(function(p){
 									if(p.scriptid == t.idForField){
-										output = '[' + p.inputvalue + ']';
+										output = '[' + p.itemArray[0].inputvalue + ']';
 									}
 								});
 								t.outCode = output;
@@ -326,9 +351,9 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 								//Would be better with a match, but looping for the moment!
 								$scope.input.uiarray.forEach(function(p){
 									if(p.scriptid == t.idForField){
-										if(!p.aggvalue) complete = false;
-										if(!p.inputvalue) complete = false;
-										output = p.aggvalue + '([' + p.inputvalue + '])';
+										if(!p.itemArray[0].aggvalue) complete = false;
+										if(!p.itemArray[0].inputvalue) complete = false;
+										output = p.itemArray[0].aggvalue + '([' + p.itemArray[0].inputvalue + '])';
 									}
 								});
 								t.outCode = output;
@@ -343,6 +368,7 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 									if($scope.previewMasterItems()){
 										$scope.input.buttonState = 1;
 										$scope.input.buttonTitle = 'Create Master Items';
+										$scope.input.buttonIcon = 'library';
 										$scope.input.warningMessage = '';
 									}
 									break;
@@ -350,6 +376,7 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 									if($scope.createMasterItems()){
 										$scope.input.buttonState = 2;
 										$scope.input.buttonTitle = 'Reset Expression Builder';
+										$scope.input.buttonIcon = 'back';
 										$scope.input.warningMessage = '';
 									}
 									break;
@@ -357,6 +384,7 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 									if($scope.resetWizard()){
 										$scope.input.buttonState = 0;
 										$scope.input.buttonTitle = 'Preview Master Items';
+										$scope.input.buttonIcon = 'view';
 										$scope.input.warningMessage = '';
 									}
 									break;
