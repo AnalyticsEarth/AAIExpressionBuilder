@@ -116,6 +116,7 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 							$scope.input.uiarray = null;
 							$scope.input.codeTemplates = null;
 							$scope.input.vizTemplates = null;
+							$scope.input.variableTemplates = null;
 							$scope.input.vizDisabled = false;
 							$scope.input.isLoading = true;
 							if($scope.input.wizardList[wizKey].config){
@@ -148,6 +149,16 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 										});
 									}
 									$scope.input.vizDisabled = false;
+
+									/* Variables to be created list */
+									$scope.input.variableTemplates = response.variables;
+									if($scope.input.variableTemplates){
+										$scope.input.variableTemplates.forEach(function(entry){
+											entry.enabled = true;
+											entry.built = false;
+										});
+									}
+
 									$scope.input.isLoading = false;
 									$scope.$apply();
 								});
@@ -398,6 +409,7 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 							$scope.input.uiarray = null;
 							$scope.input.codeTemplates = null;
 							$scope.input.vizTemplates = null;
+							$scope.input.variableTemplates = null;
 							$scope.input.vizDisabled = false;
 							$scope.input.isLoading = false,
 							$scope.input.enableVizBuild = true,
@@ -437,6 +449,15 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 										p.push(a);
 									}
 								});
+
+								if($scope.input.variableTemplates){
+									$scope.input.variableTemplates.forEach(function(t){
+										console.log("Create Variable");
+										var a = $scope.createVariable(t);
+										p.push(a);
+									});
+								};
+
 								/* Only process after all promises have competed */
 								Promise.all(p).then(values => {
 									console.log($scope.input.dimList);
@@ -537,6 +558,32 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 								});
 							}
 						};
+
+						/* Create Variable */
+						$scope.createVariable = function(variableTemplate){
+							console.log('Create Variable');
+							if(variableTemplate.enabled){
+								var app = qlik.currApp(this);
+								app.variable.getContent(variableTemplate.name).then(
+								function(data){
+									console.log('Check Variable');
+									console.log(data);
+									variableTemplate.built = 'exists';
+								}, function(e){
+									console.log('Variable does not exist, create variable');
+									app.variable.create({
+										qName : variableTemplate.name,
+										qDefinition : variableTemplate.definition,
+										qComment : variableTemplate.description
+									}).then((data) => {
+										console.log('Created Variable');
+										console.log(data);
+										variableTemplate.built = 'created';
+									});
+								});
+							}
+						};
+
 					}]
 				});
 			}

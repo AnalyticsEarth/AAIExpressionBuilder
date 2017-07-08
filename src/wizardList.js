@@ -23,9 +23,9 @@ define( [], function () {
 		},
 		{
 			index:3,
-			name:'Simple Linear Regression',
+			name:'Linear Regression',
 			status:'live',
-			config:'simplelinearregression'
+			config:'linearregression'
 		}
 	]
 });

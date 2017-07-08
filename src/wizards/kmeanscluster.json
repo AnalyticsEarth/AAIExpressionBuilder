@@ -56,7 +56,7 @@
       "description":"Returns a K-Means cluster number which is best used as a Color By Measure option",
       "scriptType":"R",
       "qlikfunction":"R.ScriptEval",
-      "rscript":"clusterdata <- q;clusterdata[is.na(clusterdata)] <- 0;set.seed(20); cluster <- kmeans(clusterdata,4,nstart = 20);cluster$cluster;"
+      "rscript":"clusterdata <- q;clusterdata[is.na(clusterdata)] <- 0;set.seed(20); cluster <- kmeans(clusterdata,$(Number of Clusters),nstart = 20);cluster$cluster;"
     },
     {
       "id":"3",
@@ -101,6 +101,14 @@
           "key":"key"
         }
       ]
+    }
+  ],
+  "variables":[
+    {
+      "id":"0",
+      "name":"Number of Clusters",
+      "description":"The number of clusters, adjust to meet your needs. Should be a numeric greater than 1 and less than the number of data points",
+      "definition":"4"
     }
   ]
 }

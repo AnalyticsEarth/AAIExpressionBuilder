@@ -1,6 +1,6 @@
 {
   "index":3,
-  "name":"Simple Linear Regression",
+  "name":"Linear Regression",
   "status":"live",
   "parameters":[
     {
@@ -19,7 +19,7 @@
       "tag":"$numeric",
       "includeinfunction":true,
       "scriptid":"independent",
-      "name":"Independent Variable",
+      "name":"Independent Variables",
       "hint":"The first will form the horizontal axis of the chart, others will be included in the regression formula",
       "array":true,
       "arrayItemDefaults":{"postoperator":"+"},
