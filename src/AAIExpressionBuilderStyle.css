@@ -15,13 +15,13 @@
 .wizarddialog {
 	min-width: 900px;
 	max-width: 900px;
-	min-height: 800px;
-	max-height: 800px;
+	min-height: 90%;
+	max-height: 90%;
 }
 
 .wizarddialogbody {
 	padding: 0px;
-  overflow:hidden;
+  overflow:scroll;
 }
 
 .wizardmarginabove {
@@ -130,9 +130,9 @@
 	font-size: 1.1em;
 	padding: 5px;
 	height:100%;
-    display:table-cell;
-    vertical-align:middle;
-    text-align:center;
+  display:table-cell;
+  vertical-align:middle;
+  text-align:center;
 }
 
 .placeholderIconSheet {
@@ -168,4 +168,13 @@
 
 .warningOrange {
   color: #f8981d;
+}
+
+.displayNameEntry {
+  width:300px;
+}
+
+.buttonTop {
+  margin-top:20px;
+  margin-bottom: 20px;
 }

@@ -32,6 +32,7 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 					input: {
 						selectedKey: '',
 						wizardName: '',
+						showKey: false,
 						wizardList: $scope.wizardList,
 						appModel: $scope.component.model.app,
 						layout: $scope.layout,
@@ -76,7 +77,7 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 						$scope.tabs = 'tab1';
 						$scope.make_tab_active = function(tabid) {
 							$scope.tabs = 'tab'+tabid;
-							console.log($scope.tabs);
+							//console.log($scope.tabs);
 						}
 
 						$scope.make_tab_active(1);
@@ -93,10 +94,14 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 
 						/* Function called when the selected wizard is changed using the
 						onscreen drop down */
-						$scope.changeWizard = function(wizKey){
-							$scope.input.selectedKey = wizKey;
-							$scope.input.wizardName = $scope.input.wizardList[wizKey].name;
-							$scope.loadUI(wizKey);
+						$scope.changeWizard = function(){
+							//console.log($scope.input.selectedKey);
+							//console.log($scope.input.selectedMethod);
+							$scope.input.selectedKey = $scope.input.selectedMethod.index;
+							$scope.input.showKey = true;
+							//console.log($scope.input.selectedKey);
+							$scope.input.wizardName = $scope.input.wizardList[$scope.input.selectedKey].name;
+							$scope.loadUI($scope.input.selectedKey);
 						};
 
 						//When any of the measures and dimensions are de-selected we must not produce visualizations as these will be incomplete
@@ -138,6 +143,7 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 									$scope.input.codeTemplates.forEach(function(entry){
 										entry.enabled = true;
 										entry.built = false;
+										entry.displayName = entry.name;
 									});
 
 									/* Visualizations to be created list */
@@ -146,6 +152,7 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 										$scope.input.vizTemplates.forEach(function(entry){
 											entry.enabled = true;
 											entry.built = false;
+											entry.displayTitle = entry.title;
 										});
 									}
 									$scope.input.vizDisabled = false;
@@ -166,7 +173,7 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 						};
 
 						$scope.addArrayItem = function(p,d){
-							console.log(d);
+							//console.log(d);
 							var dnew = JSON.parse(JSON.stringify(d));
 							p.push(dnew);
 						};
@@ -259,25 +266,25 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 									var regExpParam = new RegExp(regExpString,'g');
 									var match;
 									while ((match = regExpParam.exec(rScript)) != null) {
-    								console.log("match found at " + match.index);
-										console.log(p);
+    								//console.log("match found at " + match.index);
+										//console.log(p);
 										if(p.includedateagg){
 											//We can expect the parameter after the scriptid match to be a parameter from the dateAggList
 
 											var indexEndOfParameter = rScript.indexOf('!',match.index+regExpString.length);
-											console.log(indexEndOfParameter);
+											//console.log(indexEndOfParameter);
 											var parameterName = rScript.substring(match.index+regExpString.length,indexEndOfParameter);
-											console.log(parameterName);
+											//console.log(parameterName);
 
 											//Get Date Agg Items
 											$scope.input.dateAggList.forEach(function(entry){
 												console.log(entry);
 												if(p.itemArray[0].dateaggvalue == entry.level){
 													//Then check the
-													console.log('Match with: ' + entry.level);
-													console.log(entry[parameterName]);
+													//console.log('Match with: ' + entry.level);
+													//console.log(entry[parameterName]);
 													var replaceString = regExpString + parameterName + '!';
-													console.log(replaceString);
+													//console.log(replaceString);
 													rScript = rScript.replace(replaceString,entry[parameterName]);
 												}
 											});
@@ -369,7 +376,7 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 								});
 								t.outCode = output;
 							}
-							console.log(complete);
+							//console.log(complete);
 							return complete;
 						};
 
@@ -403,9 +410,11 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 						};
 
 						$scope.resetWizard = function(){
-							console.log("Reset Wizard");
+							//console.log("Reset Wizard");
 							$scope.input.selectedKey = '';
 							$scope.input.wizardName = '';
+							$scope.input.showKey = false;
+							$scope.input.selectedMethod= null;
 							$scope.input.uiarray = null;
 							$scope.input.codeTemplates = null;
 							$scope.input.vizTemplates = null;
@@ -427,7 +436,7 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 								return true;
 							}else{
 								//Need to do something here to notify of the failure
-								console.log("Validation Check Fail");
+								//console.log("Validation Check Fail");
 								$scope.input.warningMessage = "Complete all required parameters";
 								return false;
 							}
@@ -439,7 +448,7 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 							if($scope.previewMasterItems()){
 								var p = [];
 								$scope.input.codeTemplates.forEach(function(t){
-									console.log(t.outCode);
+									//console.log(t.outCode);
 									if(t.type.toUpperCase() == 'DIMENSION'){
 										var a = $scope.createDimension(t);
 										p.push(a);
@@ -452,7 +461,7 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 
 								if($scope.input.variableTemplates){
 									$scope.input.variableTemplates.forEach(function(t){
-										console.log("Create Variable");
+										//console.log("Create Variable");
 										var a = $scope.createVariable(t);
 										p.push(a);
 									});
@@ -460,8 +469,8 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 
 								/* Only process after all promises have competed */
 								Promise.all(p).then(values => {
-									console.log($scope.input.dimList);
-									console.log($scope.input.measureList);
+									//console.log($scope.input.dimList);
+									//console.log($scope.input.measureList);
 									if($scope.input.vizTemplates){
 										if(!$scope.input.vizDisabled){
 											$scope.input.vizTemplates.forEach(function(v){
@@ -490,12 +499,12 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 										t.outCode
 									],
 									qFieldLabels: [
-										t.name
+										t.displayName
 									],
-									title:t.name
+									title:t.displayName
 								},
 								qMetaDef: {
-									title:t.name,
+									title:t.displayName,
 									description:t.description,
 									tags:[]
 								}
@@ -516,14 +525,14 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 									qType: "measure"
 								},
 								qMeasure: {
-									qLabel:t.name,
+									qLabel:t.displayName,
 									qGrouping: "N",
 									qDef: t.outCode,
 									qExpressions:[],
 									qActiveExpression: 0
 								},
 								qMetaDef: {
-									title:t.name,
+									title:t.displayName,
 									description:t.description,
 									tags:[]
 								}
@@ -538,12 +547,12 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 
 						/* Create Master Visualization */
 						$scope.createMasterViz = function(aeVizTemplate){
-							console.log('Create Viz');
+							//console.log('Create Viz');
 							if(aeVizTemplate.type){
 								$.getJSON('../extensions/AAIExpressionBuilder/templates/' + aeVizTemplate.type + '.json', function(response){
 									var vizJSON = response;
 
-									vizJSON.qMetaDef.title = aeVizTemplate.title;
+									vizJSON.qMetaDef.title = aeVizTemplate.displayTitle;
 									vizJSON.qMetaDef.description = aeVizTemplate.description;
 
 									aeVizTemplate.replacements.forEach(function(r){
@@ -561,23 +570,23 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 
 						/* Create Variable */
 						$scope.createVariable = function(variableTemplate){
-							console.log('Create Variable');
+							//console.log('Create Variable');
 							if(variableTemplate.enabled){
 								var app = qlik.currApp(this);
 								app.variable.getContent(variableTemplate.name).then(
 								function(data){
-									console.log('Check Variable');
-									console.log(data);
+									//console.log('Check Variable');
+									//console.log(data);
 									variableTemplate.built = 'exists';
 								}, function(e){
-									console.log('Variable does not exist, create variable');
+									//console.log('Variable does not exist, create variable');
 									app.variable.create({
 										qName : variableTemplate.name,
 										qDefinition : variableTemplate.definition,
 										qComment : variableTemplate.description
 									}).then((data) => {
-										console.log('Created Variable');
-										console.log(data);
+										//console.log('Created Variable');
+										//console.log(data);
 										variableTemplate.built = 'created';
 									});
 								});

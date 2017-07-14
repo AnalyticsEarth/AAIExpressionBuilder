@@ -29,11 +29,3 @@ define( [], function () {
 		}
 	]
 });
-
-/*R.ScriptEval('
-library("forecast");
-crime <- ts(q$timeSeries, start=c($(vMinYear),$(vMinMonth)), frequency=12, end=c($(vMaxYear),$(vMaxMonth)));
-crimeforecasts <- HoltWinters(crime);
-crimeforecasts2 <- forecast.HoltWinters(crimeforecasts, h=$(vForecastPeriods));
-c(crimeforecasts2$fitted, crimeforecasts2$mean);
-', Sum({$<[Reported Date] = {"<=$(vForecastEndDate)"}>}[Crime Counter]) as timeSeries) */

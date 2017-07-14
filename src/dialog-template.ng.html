@@ -4,29 +4,23 @@
 	</lui-dialog-header>
 	<lui-dialog-body class="wizarddialogbody">
 		<lui-tab-view>
-			<lui-tabset fill="true" active-tab="tabs">
-				<lui-tab ref="tab1">Expression Builder</lui-tab>
-				<lui-tab ref="tab2">Preview Master Items</lui-tab>
+			<lui-tabset ng-show="false" fill="true" active-tab="tabs">
+				<lui-tab ref="tab1" disabled="true">Expression Builder</lui-tab>
+				<lui-tab ref="tab2" disabled="true">Master Items</lui-tab>
 			</lui-tabset>
 			<lui-tab-content ref="tab1">
 				<lui-dialog-header class="wizardSelectHeader">
-					<lui-dialog-title>Select Advanced Analytics Function:</lui-dialog-title>
-					<lui-select x-model="selectedWizard" ng-change="changeWizard(selectedWizard)">
-						<optgroup label="R - Advanced Analytic Methods">
-							<option ng-if="wiz.status == 'live'" ng-selected="selectedWizard == wiz.index" ng-repeat="wiz in input.wizardList" value="{{wiz.index}}">{{wiz.name}}</option>
-						</optgroup>
-						<optgroup label="R - Beta Methods">
-							<option ng-if="wiz.status != 'live' && layout.props.includeBeta" ng-selected="selectedWizard == wiz.index" ng-repeat="wiz in input.wizardList" value="{{wiz.index}}">{{wiz.name}} - ({{wiz.status.toUpperCase()}})</option>
-						</optgroup>
+					<lui-dialog-title>Select Advanced Analytics Method:</lui-dialog-title>
+					<lui-select ng-model="input.selectedMethod" ng-change="changeWizard()" ng-options="wiz.name for wiz in input.wizardList track by wiz.index">
 					</lui-select>
 				</lui-dialog-header>
 				<lui-dialog-body>
-					<div class="inputPlaceholder" ng-if="input.selectedKey == ''">
+					<div class="inputPlaceholder" ng-if="input.showKey == false">
 						<span class="lui-icon  placeholderIcon  lui-icon--effects"></span><br/>
-						Select Advanced Analytics Function
+						Select Advanced Analytics Method
 					</div>
 
-					<div ng-if="input.selectedKey !== '' && input.isLoading == false">
+					<div ng-if="input.showKey == true && input.isLoading == false">
 
 						<div class="wizardtitle"><b>{{input.wizardName}}</b> requires the following parameters:</div>
 						<ul class="lui-list">
@@ -63,7 +57,6 @@
 													<button ng-if="par.itemArray.length > 1" class="lui-button  lui-buttongroup__button  lui-button--rounded" ng-click="removeArrayItem(par.itemArray,i);"><span class="lui-button__icon  lui-icon  lui-icon--minus"></span></button>
 													<button ng-if="i == par.itemArray[par.itemArray.length-1]" class="lui-button  lui-buttongroup__button  lui-button--rounded" ng-click="addArrayItem(par.itemArray,par.arrayItemDefaults);"><span class="lui-button__icon  lui-icon  lui-icon--plus"></span></button>
 												</div>
-
 											</div>
 										</div>
 									</div>
@@ -72,7 +65,7 @@
 							</li>
 						</ul>
 						<div class="wizardtitlespacer"></div>
-						<div class="wizardtitle"><b>{{input.wizardName}}</b> can generate the following objects:</div>
+						<div class="wizardtitle"><b>{{input.wizardName}}</b> can generate the following master items:</div>
 						<ul class="lui-list">
 							<li ng-repeat="template in input.codeTemplates" class="lui-list__item">
 								<span class="lui-list__text">
@@ -84,10 +77,12 @@
 											<input class="lui-checkbox__input" type="checkbox" aria-label="Label" ng-model="input.codeTemplates[template.id].enabled" ng-value="input.codeTemplates[template.id].enabled" />
 											<div class="lui-checkbox__check-wrap">
 												<span class="lui-checkbox__check"></span>
-												<span class="lui-checkbox__check-text"><div class="iconspacer"><span class="lui-icon lui-icon--large lui-icon--library" aria-hidden="true"></span></div><div class="icontext">
-													{{template.name}}</div></span>
+												<span class="lui-checkbox__check-text"><div class="iconspacer"><span class="lui-icon lui-icon--large lui-icon--library" aria-hidden="true"></span></div></span>
 												</div>
 											</label>
+										</div>
+										<div class="EntryListRight">
+											<input class="lui-input displayNameEntry" ng-model="template.displayName" ng-value="template.displayName"/>
 										</div>
 									</span>
 								</li>
@@ -118,14 +113,17 @@
 												<input class="lui-checkbox__input" type="checkbox" aria-label="Label" ng-model="input.vizTemplates[template.id].enabled" ng-value="input.vizTemplates[template.id].enabled" ng-disabled="input.vizDisabled" />
 												<div class="lui-checkbox__check-wrap">
 													<span class="lui-checkbox__check"></span>
-													<span class="lui-checkbox__check-text"><div class="iconspacer"><span class="lui-icon lui-icon--large lui-icon--{{template.vizicon}}" aria-hidden="true"></span></div><div class="icontext">
-														{{template.title}}</div></span>
+													<span class="lui-checkbox__check-text"><div class="iconspacer"><span class="lui-icon lui-icon--large lui-icon--{{template.vizicon}}" aria-hidden="true"></span></div></span>
 													</div>
 												</label>
+											</div>
+											<div class="EntryListRight">
+												<input class="lui-input displayNameEntry" ng-model="template.displayTitle" ng-value="template.displayTitle"/>
 											</div>
 										</span>
 									</li>
 								</ul>
+								<button class="lui-button lui-button--block buttonTop" ng-click="processButtonClick();"><span class="lui-button__text">{{input.buttonTitle}}</span><span class="lui-button__icon  lui-icon  lui-icon--{{input.buttonIcon}}"></span></button>
 							</div>
 						</lui-dialog-body>
 					</lui-tab-content>
@@ -134,10 +132,11 @@
 							<lui-dialog-title>Qlik Expression Code Preview</lui-dialog-title>
 						</lui-dialog-header>
 						<lui-dialog-body>
+							<button class="lui-button lui-button--block buttonTop" ng-click="processButtonClick();"><span class="lui-button__text">{{input.buttonTitle}}</span><span class="lui-button__icon  lui-icon  lui-icon--{{input.buttonIcon}}"></span></button>
 							<ul class="lui-list">
 								<div ng-repeat="template in input.codeTemplates"  ng-if="template.enabled">
 									<li class="lui-list__header">
-										<span class="lui-list__text">{{template.type}}: {{template.name}}</span>
+										<span class="lui-list__text">{{template.type}}: {{template.displayName}}</span>
 									</li>
 									<li class="lui-list__item">
 										<span class="lui-list__text">
@@ -203,13 +202,13 @@
 									</li>
 								</div>
 							</ul>
+							<button class="lui-button lui-button--block buttonTop" ng-click="processButtonClick();"><span class="lui-button__text">{{input.buttonTitle}}</span><span class="lui-button__icon  lui-icon  lui-icon--{{input.buttonIcon}}"></span></button>
 						</lui-dialog-body>
 					</lui-tab-content>
 				</lui-tab-view>
 			</lui-dialog-body>
 			<lui-dialog-footer>
 				<div class="warningLeft">{{input.warningMessage}}</div>
-				<button class="lui-button  lui-dialog__footer-button" ng-click="processButtonClick();"><span class="lui-button__text">{{input.buttonTitle}}</span><span class="lui-button__icon  lui-icon  lui-icon--{{input.buttonIcon}}"></span></button>
 				<button class="lui-button  lui-dialog__footer-button" ng-click="close();">Close</button>
 			</lui-dialog-footer>
 		</lui-dialog>
