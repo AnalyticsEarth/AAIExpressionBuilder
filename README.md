@@ -1,6 +1,8 @@
 # AAI Expression Builder
 The AAI Advanced Analytics Expression Builder is a Qlik Sense extension used to create advanced analytics expressions as master items and wrap these in to a prebuilt visualization. These visualizations use native chart types and can be edited either as a master item or un-linked and customized.
 
+[Watch an example on YouTube](https://www.youtube.com/watch?v=xw5sH7IKWco)
+
 ## How to get started?
 1. Install the extension through the Qlik Sense QMC.
 1. Create an application with the data to support your visualization
