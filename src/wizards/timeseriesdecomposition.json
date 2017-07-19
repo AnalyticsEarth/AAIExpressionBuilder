@@ -1,5 +1,5 @@
 {
-  "index":2,
+  "index":1,
   "name":"Time Series Decomposition",
   "status":"live",
   "parameters":[
@@ -8,7 +8,7 @@
       "type":"fieldselect",
       "tag":"$date",
       "includedateagg":true,
-      "includeinfunction":false,
+      "includeinfunction":true,
       "scriptid":"date1",
       "name":"Date Field",
       "hint":"Select the date field and the level of granualarity in the source data"
@@ -31,7 +31,7 @@
       "description":"The trend component from the timeseries",
       "scriptType":"R",
       "qlikfunction":"R.ScriptEval",
-      "rscript":"timeseries <- ts(q$agg1, start=c($(=YEAR(MIN(#!<date1>!#))),$(=NUM(MONTH(MIN(#!<date1>!#))))), frequency=!!<date1>!frequency!, end=c($(=YEAR(MAX(#!<date1>!#))),$(=NUM(MONTH(MAX(#!<date1>!#)))))); decom <- decompose(timeseries); decom$trend;"
+      "rscript":"q$rowid <- 1:nrow(q);q2 <- q[order(q$date1),];timeseries <- ts(q2$agg1, start=c($(=YEAR(MIN(#!<date1>!#))),$(=NUM(MONTH(MIN(#!<date1>!#))))), frequency=!!<date1>!frequency!, end=c($(=YEAR(MAX(#!<date1>!#))),$(=NUM(MONTH(MAX(#!<date1>!#))))));t <- as.numeric(stl(timeseries, s.window=\"periodic\")$time.series[,\"trend\"]);t2 <- c(t,rep(NA,length(q2$date1)-length(t)));t3 <- data.frame(rowid=q2$rowid,data=t2);t3[order(t3$rowid),]$data;"
     },
     {
       "id":"1",
@@ -40,7 +40,7 @@
       "description":"The seasonal component from the timeseries",
       "scriptType":"R",
       "qlikfunction":"R.ScriptEval",
-      "rscript":"timeseries <- ts(q$agg1, start=c($(=YEAR(MIN(#!<date1>!#))),$(=NUM(MONTH(MIN(#!<date1>!#))))), frequency=!!<date1>!frequency!, end=c($(=YEAR(MAX(#!<date1>!#))),$(=NUM(MONTH(MAX(#!<date1>!#)))))); decom <- decompose(timeseries); decom$seasonal;"
+      "rscript":"q$rowid <- 1:nrow(q);q2 <- q[order(q$date1),];timeseries <- ts(q2$agg1, start=c($(=YEAR(MIN(#!<date1>!#))),$(=NUM(MONTH(MIN(#!<date1>!#))))), frequency=!!<date1>!frequency!, end=c($(=YEAR(MAX(#!<date1>!#))),$(=NUM(MONTH(MAX(#!<date1>!#))))));t <- as.numeric(stl(timeseries, s.window=\"periodic\")$time.series[,\"seasonal\"]);t2 <- c(t,rep(NA,length(q2$date1)-length(t)));t3 <- data.frame(rowid=q2$rowid,data=t2);t3[order(t3$rowid),]$data;"
     },
     {
       "id":"2",
@@ -49,7 +49,7 @@
       "description":"The random component from the timeseries",
       "scriptType":"R",
       "qlikfunction":"R.ScriptEval",
-      "rscript":"timeseries <- ts(q$agg1, start=c($(=YEAR(MIN(#!<date1>!#))),$(=NUM(MONTH(MIN(#!<date1>!#))))), frequency=!!<date1>!frequency!, end=c($(=YEAR(MAX(#!<date1>!#))),$(=NUM(MONTH(MAX(#!<date1>!#)))))); decom <- decompose(timeseries); decom$random;"
+      "rscript":"q$rowid <- 1:nrow(q);q2 <- q[order(q$date1),];timeseries <- ts(q2$agg1, start=c($(=YEAR(MIN(#!<date1>!#))),$(=NUM(MONTH(MIN(#!<date1>!#))))), frequency=!!<date1>!frequency!, end=c($(=YEAR(MAX(#!<date1>!#))),$(=NUM(MONTH(MAX(#!<date1>!#))))));t <- as.numeric(stl(timeseries, s.window=\"periodic\")$time.series[,\"remainder\"]);t2 <- c(t,rep(NA,length(q2$date1)-length(t)));t3 <- data.frame(rowid=q2$rowid,data=t2);t3[order(t3$rowid),]$data;"
     },
     {
       "id":"3",

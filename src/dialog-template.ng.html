@@ -2,7 +2,7 @@
 	<lui-dialog-header>
 		<lui-dialog-title>Advanced Analytics Expressions Builder</lui-dialog-title>
 	</lui-dialog-header>
-	<lui-dialog-body class="wizarddialogbody">
+	<lui-dialog-body class="wizarddialogbody"  id="scrollBody">
 		<lui-tab-view>
 			<lui-tabset ng-show="false" fill="true" active-tab="tabs">
 				<lui-tab ref="tab1" disabled="true">Expression Builder</lui-tab>
@@ -123,16 +123,20 @@
 										</span>
 									</li>
 								</ul>
-								<button class="lui-button lui-button--block buttonTop" ng-click="processButtonClick();"><span class="lui-button__text">{{input.buttonTitle}}</span><span class="lui-button__icon  lui-icon  lui-icon--{{input.buttonIcon}}"></span></button>
+								<button class="lui-button lui-button--block lui-button--large buttonTop" ng-click="processButtonClick();"><span class="lui-button__text">{{input.buttonTitle}}</span><span class="lui-button__icon  lui-icon  lui-icon--{{input.buttonIcon}}"></span></button>
 							</div>
 						</lui-dialog-body>
 					</lui-tab-content>
 					<lui-tab-content ref="tab2">
 						<lui-dialog-header>
-							<lui-dialog-title>Qlik Expression Code Preview</lui-dialog-title>
+							<lui-dialog-title>Qlik Expression Code Preview
+							</lui-dialog-title>
 						</lui-dialog-header>
 						<lui-dialog-body>
-							<button class="lui-button lui-button--block buttonTop" ng-click="processButtonClick();"><span class="lui-button__text">{{input.buttonTitle}}</span><span class="lui-button__icon  lui-icon  lui-icon--{{input.buttonIcon}}"></span></button>
+							<div class="lui-buttongroup  buttonTop">
+								<button class="lui-button lui-buttongroup__button lui-button--large" ng-if="input.buttonState < 2" ng-click="processBackClick();"><span class="lui-button__text">Back</span><span class="lui-button__icon  lui-icon  lui-icon--back"></span></button>
+								<button class="lui-button lui-buttongroup__button lui-button--large" ng-click="processButtonClick();"><span class="lui-button__text">{{input.buttonTitle}}</span><span class="lui-button__icon  lui-icon  lui-icon--{{input.buttonIcon}}"></span></button>
+							</div>
 							<ul class="lui-list">
 								<div ng-repeat="template in input.codeTemplates"  ng-if="template.enabled">
 									<li class="lui-list__header">
@@ -202,7 +206,10 @@
 									</li>
 								</div>
 							</ul>
-							<button class="lui-button lui-button--block buttonTop" ng-click="processButtonClick();"><span class="lui-button__text">{{input.buttonTitle}}</span><span class="lui-button__icon  lui-icon  lui-icon--{{input.buttonIcon}}"></span></button>
+							<div class="lui-buttongroup  buttonTop">
+								<button class="lui-button lui-buttongroup__button lui-button--large" ng-if="input.buttonState < 2" ng-click="processBackClick();"><span class="lui-button__text">Back</span><span class="lui-button__icon  lui-icon  lui-icon--back"></span></button>
+								<button class="lui-button lui-buttongroup__button lui-button--large" ng-click="processButtonClick();"><span class="lui-button__text">{{input.buttonTitle}}</span><span class="lui-button__icon  lui-icon  lui-icon--{{input.buttonIcon}}"></span></button>
+							</div>
 						</lui-dialog-body>
 					</lui-tab-content>
 				</lui-tab-view>

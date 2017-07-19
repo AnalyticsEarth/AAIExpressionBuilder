@@ -407,6 +407,17 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 									}
 									break;
 							}
+							document.getElementById("scrollBody").scrollTop = 0;
+						};
+
+						$scope.processBackClick = function(){
+							$scope.make_tab_active(1);
+							$scope.input.buttonState = 0;
+							$scope.input.buttonTitle = 'Preview Master Items';
+							$scope.input.buttonIcon = 'view';
+							$scope.input.warningMessage = '';
+
+							document.getElementById("scrollBody").scrollTop = 0;
 						};
 
 						$scope.resetWizard = function(){
