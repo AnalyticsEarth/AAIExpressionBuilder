@@ -18,6 +18,18 @@ function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Uti
 		},
 		template: template,
 		definition: definition,
+		paint: function ($element,layout){
+
+			layout.navmode = qlik.navigation.getMode();
+			console.log($element);
+
+			if(layout.navmode == 'analysis'){
+				$("#launchButton").removeClass("hidden").addClass("hidden");
+			}else{
+				$("#launchButton").removeClass("hidden");
+			}
+
+		},
 		controller: ['$scope','luiDialog', function ( $scope, luiDialog) {
 			$scope.wizardList = wizardList;
 			$scope.layout = $scope.$parent.layout;
