@@ -29,3 +29,6 @@ By default the extension will look for the datatype tags in the data model when 
 
 ## More information
 See the WIKI for detailed information regarding this project.
+
+## New Methods
+Please specify any new methods which would be of use in the GitHub issues.
