@@ -2,7 +2,7 @@
 	"name": "AAI Expression Builder",
 	"description": "Wizard to create measures using common R functions for Advanced Analytics",
 	"type": "visualization",
-	"version": "1.0.2",
+	"version": "1.0.1",
 	"icon": "effects",
 	"author": "Steven Pressland",
 	"homepage": "https://github.com/AnalyticsEarth/AAIExpressionBuilder",
