@@ -7,7 +7,7 @@ define( [ "qlik",
 'util',
 'enigma',
 'text!./schema.json'
-],
+], 
 function ( qlik, template, definition, dialogTemplate, cssStyle, wizardList, Util, enigma, schema) {
 	'use strict';
 	return {
